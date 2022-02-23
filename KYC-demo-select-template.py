@@ -1,7 +1,7 @@
 import time
 import KYC
 
-#KYC.testIdCardMode()
+KYC.testIdCardMode()
 KYC.testIdCard_DriversLicenseMode()
 
 print('=== TEST SUCCESS ===')
