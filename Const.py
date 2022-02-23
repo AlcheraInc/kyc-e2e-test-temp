@@ -19,7 +19,6 @@ SELECT_COMPLETE_BUTTON_XPATH = '//*[@id="app"]/div[1]/div/div/div[11]/div[2]'
 # 신분증 제출 페이지
 #UPLOAD_IMAGE_BUTTON_XPATH 는 input type file 로 따로 잡아서 사용
 SUBMIT_ID_BUTTON_XPATH       = '//*[@id="app"]/div[1]/div/div[1]/div[7]/div[2]'
-LICENSE_FILE_PATH            = 'C:\driversLicense.jpg'
 SUBMIT_BUTTON_XPATH          = '//*[@id="app"]/div[7]/div/div/div/div[4]/div[2]'
 
 """
