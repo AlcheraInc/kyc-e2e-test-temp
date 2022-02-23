@@ -2,9 +2,6 @@
 운전면허증 인증 자동화
 """
 import time
-from driver import ChromeDriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 import KYC
 import Const
 
@@ -17,13 +14,13 @@ print('=== KYC clickIdCardMode ===')
 KYC.enterPrivacyInfo()
 print('=== KYC enterPrivacyInfo ===')
 
-KYC.selectDriversLicense()
+KYC.selectTypeOfId()
 print('=== KYC selectDriversLicense ===')
 
-KYC.uploadDriversLicenseFile()
+KYC.uploadIdImageFile()
 print('=== KYC uploadDriversLicenseFile ===')
 
-KYC.verifyIdCardInfo()
+KYC.verifyEnteredIdInfo()
 print('=== KYC verifyIdCardInfo ===')
 
 print('=== TEST SUCCESS ===')
