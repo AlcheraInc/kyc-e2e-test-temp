@@ -4,6 +4,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import Const
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+
+from ahk import AHK
+from ahk import ActionChain
 
 logging.basicConfig(level=logging.DEBUG, format="'%(asctime)s - [%(filename)s:%(lineno)d][KYC LOG] %(message)s'") 
 
@@ -49,7 +54,7 @@ def testIdCard_DriversLicenseMode():
     idKindOp = 3
     
     connect(Const.TEST_SITE_URL)
-    logging.debug('=== KYC connect ===')
+    logging.debug('=== KYC connect ===')    
 
     clickTestMode(funcOp)
     logging.debug('=== KYC click Drivers License Mode ===')
@@ -214,7 +219,6 @@ def clickTestMode(funcOp):
     
     logging.debug(f'선택한 메뉴는 {func} 입니다.')
 
-
 """
 # 개인정보 입력 페이지
 """
@@ -232,13 +236,13 @@ def enterPrivacyInfo(funcOp):
                 # driver.implicitly_wait(5)  # 묵시적 대기, 활성화를 주어진 시간만큼까지 기다린다.
                 # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
                 nameTextField = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getNameInputXPath(funcOp))))
-                nameTextField.send_keys(Const.USER_NAME)
-
+                nameTextField.send_keys(getUserName(idKindOp))
+                
                 phoneTextField = driver.find_element(By.XPATH, getPhoneInputXPath(funcOp))
                 phoneTextField.send_keys(Const.USER_PHONE)
 
                 birthTextField = driver.find_element(By.XPATH, getBirthInputXPath(funcOp))
-                birthTextField.send_keys(Const.USER_BIRTH)
+                birthTextField.send_keys(getUserBirth(funcOp))
 
                 emailTextField = driver.find_element(By.XPATH, getEmailInputXPath(funcOp))
                 emailTextField.send_keys(Const.USER_EMAIL)
@@ -402,6 +406,30 @@ def getVerifyIdInfoPageNextBtnXPath(idKindOpNum):
         5: r'//*[@id="app"]/div[1]/div/div[18]/div[2]',
         6: r'//*[@id="app"]/div[1]/div/div[20]/div[2]'
         }.get(idKindOpNum, "없는 메뉴")
+    
+    return xPath
+
+
+def getUserName(funcOpNum):
+    xPath = {
+        2: Const.USER_NAME,
+        3: Const.USER_NAME,
+        4: Const.PASSPORT_USER_NAME,
+        5: Const.FOREIGN_USER_NAME,
+        6: Const.REGISTERED_FOREIGN_USER_NAME
+        }.get(funcOpNum, "없는 메뉴")
+    
+    return xPath
+
+
+def getUserBirth(funcOpNum):
+    xPath = {
+        2: Const.USER_BIRTH,
+        3: Const.USER_BIRTH,
+        4: Const.PASSPORT_USER_BIRTH,
+        5: Const.FOREIGN_USER_BIRTH,
+        6: Const.REGISTERED_FOREIGN_USER_BIRTH
+        }.get(funcOpNum, "없는 메뉴")
     
     return xPath
 
