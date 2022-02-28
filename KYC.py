@@ -1,172 +1,302 @@
 import logging
+import string
+import Const
+import os
+from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.remote.webelement import WebElement
+from selenium.common.exceptions import (TimeoutException, NoSuchElementException)
+from datetime import datetime
+from fileinput import filename
 from driver import ChromeDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import Const
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-from ahk import AHK
-from ahk import ActionChain
+if not os.path.exists('./logs'): os.makedirs('./logs')
 
-logging.basicConfig(level=logging.DEBUG, format="'%(asctime)s - [%(filename)s:%(lineno)d][KYC LOG] %(message)s'") 
+logFileName = datetime.now().strftime('%Y_%m_%d_%H_%M.log')
+file_handler = logging.FileHandler('./logs/' + logFileName)
+formatter = logging.Formatter('%(asctime)s - [%(filename)s:%(funcName)s:%(lineno)d] %(message)s')
+file_handler.setFormatter(formatter)
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(file_handler)
 
 # 크롬 브라우저 객체
 driver = ChromeDriver().set_driver()
 
-"""
-주민등록증 검사 자동화 테스트
-"""
-def testIdCardMode():
+def testIdCardMode(funcOp = 2, idKindOp = 2):
+    """
+    주민등록증 검사 자동화 테스트
     
-    # 인증 기능 번호 [2 ~ 8]
-    funcOp = 2
-    # 신분증 종류 번호 [2 ~ 6]
-    idKindOp = 2
-    
-    connect(Const.TEST_SITE_URL)
-    logging.debug('=== KYC connect ===')
-
-    clickTestMode(funcOp)
-    logging.debug('=== KYC click Id Card Mode ===')
-
-    enterPrivacyInfo(funcOp)
-    logging.debug('=== KYC enter Privacy Info ===')
-
-    selectTypeOfId(idKindOp)
-    logging.debug('=== KYC select ID Card ===')
-
-    uploadIdImageFile(idKindOp)
-    logging.debug('=== KYC upload ID Card Image File ===')
-
-    verifyEnteredIdInfo(idKindOp)
-    logging.debug('=== KYC verify Id Card Info ===')
-    
-"""
-운전면허증 검사 자동화 테스트
-"""
-def testIdCard_DriversLicenseMode():
-    
-    # 인증 기능 번호 [2 ~ 8]
-    funcOp = 2
-    # 신분증 종류 번호 [2 ~ 6]
-    idKindOp = 3
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
     
     connect(Const.TEST_SITE_URL)
-    logging.debug('=== KYC connect ===')    
+    logging.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.debug('=== KYC click Drivers License Mode ===')
+    logging.info('=== KYC click Id Card Mode ===')
 
-    enterPrivacyInfo(funcOp)
-    logging.debug('=== KYC enter Privacy Info ===')
+    enterPrivacyInfo(idKindOp)
+    logging.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.debug('=== KYC select Drivers License ===')
+    logging.info('=== KYC select ID Card ===')
 
     uploadIdImageFile(idKindOp)
-    logging.debug('=== KYC upload Drivers License File ===')
+    logging.info('=== KYC upload ID Card Image File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.debug('=== KYC verify Drivers License Info ===')
+    logging.info('=== KYC verify Id Card Info ===')
 
-"""
-한국 여권 검사 자동화 테스트
-"""
-def testIdCard_PassportMode():
+    logging.info('==============================')
+    logging.info('=== testIdCardMode SUCCESS ===')
+    logging.info('==============================')
     
-    # 인증 기능 번호 [2 ~ 8]
-    funcOp = 2
-    # 신분증 종류 번호 [2 ~ 6]
-    idKindOp = 4
+    
+def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
+    """
+    운전면허증 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
     
     connect(Const.TEST_SITE_URL)
-    logging.debug('=== KYC connect ===')
+    logging.info('=== KYC connect ===')    
 
     clickTestMode(funcOp)
-    logging.debug('=== KYC click Passport Mode ===')
+    logging.info('=== KYC click Drivers License Mode ===')
 
-    enterPrivacyInfo(funcOp)
-    logging.debug('=== KYC enter Privacy Info ===')
+    enterPrivacyInfo(idKindOp)
+    logging.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.debug('=== KYC select Passport ===')
+    logging.info('=== KYC select Drivers License ===')
 
     uploadIdImageFile(idKindOp)
-    logging.debug('=== KYC upload Passport File ===')
+    logging.info('=== KYC upload Drivers License File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.debug('=== KYC verify Passport Info ===')
-    
+    logging.info('=== KYC verify Drivers License Info ===')
 
-"""
-외국 여권 검사 자동화 테스트
-"""
-def testIdCard_foreignPassportMode():
+    logging.info('=============================================')
+    logging.info('=== testIdCard_DriversLicenseMode SUCCESS ===')
+    logging.info('=============================================')
+
+def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
+    """
+    한국 여권 검사 자동화 테스트    
     
-    # 인증 기능 번호 [2 ~ 8]
-    funcOp = 2
-    # 신분증 종류 번호 [2 ~ 6]
-    idKindOp = 5
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
     
     connect(Const.TEST_SITE_URL)
-    logging.debug('=== KYC connect ===')
+    logging.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.debug('=== KYC click Foreign Passport Mode ===')
+    logging.info('=== KYC click Passport Mode ===')
 
-    enterPrivacyInfo(funcOp)
-    logging.debug('=== KYC enter Privacy Info ===')
+    enterPrivacyInfo(idKindOp)
+    logging.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.debug('=== KYC select Foreign Passport ===')
+    logging.info('=== KYC select Passport ===')
 
     uploadIdImageFile(idKindOp)
-    logging.debug('=== KYC upload Foreign Passport File ===')
+    logging.info('=== KYC upload Passport File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.debug('=== KYC verify Foreign Passport Info ===')
+    logging.info('=== KYC verify Passport Info ===')
+
+    logging.info('=======================================')
+    logging.info('=== testIdCard_PassportMode SUCCESS ===')
+    logging.info('=======================================')
     
 
-"""
-외국인등록증 검사 자동화 테스트
-"""
-def testIdCard_alienRegistrationMode():
+def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
+    """
+    외국 여권 검사 자동화 테스트
     
-    # 인증 기능 번호 [2 ~ 8]
-    funcOp = 2
-    # 신분증 종류 번호 [2 ~ 6]
-    idKindOp = 6
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
     
     connect(Const.TEST_SITE_URL)
-    logging.debug('=== KYC connect ===')
+    logging.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.debug('=== KYC click Alien Registration Mode ===')
+    logging.info('=== KYC click Foreign Passport Mode ===')
 
-    enterPrivacyInfo(funcOp)
-    logging.debug('=== KYC enter Privacy Info ===')
+    enterPrivacyInfo(idKindOp)
+    logging.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.debug('=== KYC select Alien Registration ===')
+    logging.info('=== KYC select Foreign Passport ===')
 
     uploadIdImageFile(idKindOp)
-    logging.debug('=== KYC upload Alien Registration File ===')
+    logging.info('=== KYC upload Foreign Passport File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.debug('=== KYC verify Alien Registration Info ===')
+    logging.info('=== KYC verify Foreign Passport Info ===')
+
+    logging.info('==============================================')
+    logging.info('=== testIdCard_foreignPassportMode SUCCESS ===')
+    logging.info('==============================================')
     
 
-"""
-# MAIN 페이지
-"""
+def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
+    """
+    외국인등록증 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    
+    connect(Const.TEST_SITE_URL)
+    logging.info('=== KYC connect ===')
+
+    clickTestMode(funcOp)
+    logging.info('=== KYC click Alien Registration Mode ===')
+
+    enterPrivacyInfo(idKindOp)
+    logging.info('=== KYC enter Privacy Info ===')
+
+    selectTypeOfId(idKindOp)
+    logging.info('=== KYC select Alien Registration ===')
+
+    uploadIdImageFile(idKindOp)
+    logging.info('=== KYC upload Alien Registration File ===')
+
+    verifyEnteredIdInfo(idKindOp)
+    logging.info('=== KYC verify Alien Registration Info ===')
+
+    logging.info('================================================')
+    logging.info('=== testIdCard_alienRegistrationMode SUCCESS ===')
+    logging.info('================================================')
+    
+
+def testFaceIdMode(funcOp = 3, idKindOp = 2):
+    """
+    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    
+    testIdCardMode(3,2)
+    
+    # 다음 버튼 클릭
+    faceShootBtn = driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/div/div[6]/div[2]')
+    faceShootBtn.click()
+    
+    try:
+        WebDriverWait(driver, 3).until(EC.alert_is_present())
+        driver.switch_to.alert
+        logger.info(Alert(driver).text)
+        Alert(driver).accept()
+    except TimeoutException:
+        logger.info('Access Camera Auth Alert Pass.')
+        
+    
+    
+    logging.info('==============================')
+    logging.info('=== testFaceIdMode SUCCESS ===')
+    logging.info('==============================')
+    
 def connect(url):
+    """
+    # MAIN 페이지
+    """
     # 페이지 가져오기 (접속)
     driver.get(url)
 
     # 화면 크기 지정
-    driver.set_window_rect(0, 0, 1680, 990)  # 특정 좌표(x,y)와 크기(width,height)로 변경
+    # driver.set_window_rect(0, 0, 1680, 990)  # 특정 좌표(x,y)와 크기(width,height)로 변경
 
     # Debug Window 설정 여부 버튼
     postMsgToggleBtn = driver.find_element(
@@ -179,16 +309,17 @@ def connect(url):
     privacyOpCheckBtn.click()
 
 
-"""
-2: 신분증 인증
-3: 신분증 인증 | 얼굴확인 
-4: 신분증 인증 | 얼굴확인(+라이브니스)
-5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
-6: 계좌 인증
-7: 신분증 인증 | 계좌 인증
-8: 신분증 인증 | 얼굴확인 | 계좌 인증
-"""
 def clickTestMode(funcOp):
+    """
+    2: 신분증 인증
+    3: 신분증 인증 | 얼굴확인 
+    4: 신분증 인증 | 얼굴확인(+라이브니스)
+    5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+    6: 계좌 인증
+    7: 신분증 인증 | 계좌 인증
+    8: 신분증 인증 | 얼굴확인 | 계좌 인증
+    """
+    
     if driver:
         xPath = {
         2: r'//*[@id="logic-options"]/ul/li[1]/img',
@@ -205,7 +336,7 @@ def clickTestMode(funcOp):
         targetBtn.click()
 
     else:
-        logging.debug('Please call connect() first.')
+        logging.info('Please call connect() first.')
 
     func = {
         2: '신분증 인증',
@@ -217,12 +348,14 @@ def clickTestMode(funcOp):
         8: '신분증 인증 | 얼굴확인 | 계좌 인증'
         }.get(funcOp, "없는 메뉴")
     
-    logging.debug(f'선택한 메뉴는 {func} 입니다.')
+    logging.info(f'선택한 메뉴는 {func} 입니다.')
 
-"""
-# 개인정보 입력 페이지
-"""
-def enterPrivacyInfo(funcOp):
+
+def enterPrivacyInfo(idKindOp):
+    """
+    # 개인정보 입력 페이지
+    """
+    
     if driver:
         # 개인정보 입력 페이지는 iframe 으로 옮겨서 검사해야 코드로 접근이 가능함
         kycIframe = driver.find_element(By.CSS_SELECTOR, 'iframe')
@@ -235,16 +368,16 @@ def enterPrivacyInfo(funcOp):
 
                 # driver.implicitly_wait(5)  # 묵시적 대기, 활성화를 주어진 시간만큼까지 기다린다.
                 # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
-                nameTextField = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getNameInputXPath(funcOp))))
+                nameTextField = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getNameInputXPath(idKindOp))))
                 nameTextField.send_keys(getUserName(idKindOp))
                 
-                phoneTextField = driver.find_element(By.XPATH, getPhoneInputXPath(funcOp))
+                phoneTextField = driver.find_element(By.XPATH, getPhoneInputXPath(idKindOp))
                 phoneTextField.send_keys(Const.USER_PHONE)
 
-                birthTextField = driver.find_element(By.XPATH, getBirthInputXPath(funcOp))
-                birthTextField.send_keys(getUserBirth(funcOp))
+                birthTextField = driver.find_element(By.XPATH, getBirthInputXPath(idKindOp))
+                birthTextField.send_keys(getUserBirth(idKindOp))
 
-                emailTextField = driver.find_element(By.XPATH, getEmailInputXPath(funcOp))
+                emailTextField = driver.find_element(By.XPATH, getEmailInputXPath(idKindOp))
                 emailTextField.send_keys(Const.USER_EMAIL)
 
                 # 다음 버튼 클릭
@@ -252,16 +385,17 @@ def enterPrivacyInfo(funcOp):
                 nextBtn.click()
             
             else:
-                logging.debug('The iframe id is incorrect. Expected: "kyc_iframe" Actual: ', iframeId)
+                logging.info('The iframe id is incorrect. Expected: "kyc_iframe" Actual: ', iframeId)
 
     else:
-        logging.debug('Please call connect() first.')
+        logging.info('Please call connect() first.')
 
 
-"""
-# 신분증 메뉴 선택 페이지
-"""
 def selectTypeOfId(idKindOp):
+    """
+    # 신분증 메뉴 선택 페이지
+    """
+    
     if driver:
         # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
         choiceIdBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getSelectTypeOfIdXPath(idKindOp))))
@@ -272,13 +406,14 @@ def selectTypeOfId(idKindOp):
         nextBtn.click()
 
     else:
-        logging.debug('Please call connect() first.')
+        logging.info('Please call connect() first.')
 
 
-"""
-# 신분증 사진 업로드 페이지
-"""
 def uploadIdImageFile(idKindOp):
+    """
+    # 신분증 사진 업로드 페이지
+    """
+    
     if driver:
         #UPLOAD_IMAGE_BUTTON_XPATH 는 input type file 로 따로 잡아서 사용
         driver.find_element(By.CSS_SELECTOR, "input[type='file']").send_keys(getIdImageFilePath(idKindOp))
@@ -291,19 +426,36 @@ def uploadIdImageFile(idKindOp):
         submitBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, Const.SUBMIT_BUTTON_XPATH)))
         submitBtn.click()
     else:
-        logging.debug('Please call connect() first.')
+        logging.info('Please call connect() first.')
 
 
-"""
-# 개인정보 확인 페이지
-"""
 def verifyEnteredIdInfo(idKindOp):
-    if driver:
-        # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
-        nextBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getVerifyIdInfoPageNextBtnXPath(idKindOp))))
-        nextBtn.click()
-    else:
-        logging.debug('Please call connect(getNameInputXPath(funcOpNum)) first.')
+    """
+    # 개인정보 확인 페이지
+    """
+    
+    try:
+        if driver:
+            # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
+            nextBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getVerifyIdInfoPageNextBtnXPath(idKindOp))))
+            nextBtn.click()
+            
+            byTxt = By.CLASS_NAME
+            targetTxt = 'v-card'
+            
+            # v-card 가 표시되면 진행 중 오류가 발생한 것으로 간주.
+            if existsElement(byTxt, targetTxt):
+                raise Exception(driver.find_element(byTxt, targetTxt))
+        else:
+            raise Exception('Please call connect() first.')
+    
+    except Exception as e:
+        if e.args.__len__() > 0 and isinstance(e.args[0], WebElement):
+            logger.error(str(e.args[0].text))
+        else :
+            logger.error(str(e))
+        
+        raise e
 
 
 def getNameInputXPath(funcOpNum):
@@ -354,15 +506,16 @@ def getEmailInputXPath(funcOpNum):
     return xPath
 
 
-"""
-신분증 종류 번호 [2 ~ 6]
-2: 주민등록증
-3: 운전면허증
-4: 한국 여권
-5: 외국 여권
-6: 외국인등록증
-"""
 def getSelectTypeOfIdXPath(idKindOpNum):
+    """
+    신분증 종류 번호 [2 ~ 6]
+    2: 주민등록증
+    3: 운전면허증
+    4: 한국 여권
+    5: 외국 여권
+    6: 외국인등록증
+    """
+    
     xPath = {
         2: r'//*[@id="app"]/div[1]/div/div/div[5]',
         3: r'//*[@id="app"]/div[1]/div/div/div[6]',
@@ -379,7 +532,7 @@ def getSelectTypeOfIdXPath(idKindOpNum):
         6: '외국인등록증'
         }.get(idKindOpNum, "없는 메뉴")
     
-    logging.debug(f'선택한 신분증 종류는 {func} 입니다.')
+    logging.info(f'선택한 신분증 종류는 {func} 입니다.')
     
     return xPath
 
@@ -395,16 +548,17 @@ def getIdImageFilePath(idKindOpNum):
     
     return filePath
 
-"""
-신분증 정보 확인 페이지
-"""
 def getVerifyIdInfoPageNextBtnXPath(idKindOpNum):
+    """
+    신분증 정보 확인 페이지
+    """
+    
     xPath = {
         2: r'//*[@id="app"]/div[1]/div/div[12]/div[2]',
         3: r'//*[@id="app"]/div[1]/div/div[14]/div[2]',
         4: r'//*[@id="app"]/div[1]/div/div[16]/div[2]',
-        5: r'//*[@id="app"]/div[1]/div/div[18]/div[2]',
-        6: r'//*[@id="app"]/div[1]/div/div[20]/div[2]'
+        5: r'//*[@id="app"]/div[1]/div/div[14]/div[2]',
+        6: r'//*[@id="app"]/div[1]/div/div[12]/div[2]'
         }.get(idKindOpNum, "없는 메뉴")
     
     return xPath
@@ -433,7 +587,14 @@ def getUserBirth(funcOpNum):
     
     return xPath
 
-
+def existsElement(by: By, target: string):
+    try:
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((by, target)))
+    
+    except (TimeoutException, NoSuchElementException) as e:
+        return False
+    
+    return True
 
 
 
