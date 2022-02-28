@@ -19,15 +19,18 @@ SELECT_COMPLETE_BUTTON_XPATH = '//*[@id="app"]/div[1]/div/div/div[11]/div[2]'
 # 신분증 제출 페이지
 #UPLOAD_IMAGE_BUTTON_XPATH 는 input type file 로 따로 잡아서 사용
 SUBMIT_ID_BUTTON_XPATH       = '//*[@id="app"]/div[1]/div/div[1]/div[7]/div[2]'
-LICENSE_FILE_PATH            = 'C:\driversLicense.jpg'
 SUBMIT_BUTTON_XPATH          = '//*[@id="app"]/div[7]/div/div/div/div[4]/div[2]'
 
 """
 Input Value
 """
-USER_NAME     = '김범준'
-USER_BIRTH    = '1990-02-13'
-# USER_NAME     = '안유리'
-# USER_BIRTH    = '1990-07-22'
+USER_NAME                     = '김범준'
+USER_BIRTH                    = '1990-02-13'
+PASSPORT_USER_NAME            = '양동현'
+PASSPORT_USER_BIRTH           = '1984-11-23'
+FOREIGN_USER_NAME             = 'TAE JOHNNY'
+FOREIGN_USER_BIRTH            = '1993-01-27'
+REGISTERED_FOREIGN_USER_NAME  = '손성규'
+REGISTERED_FOREIGN_USER_BIRTH = '1993-10-19'
 USER_PHONE    = '01027018838'
 USER_EMAIL    = 'bj.kim@alcherainc.com'

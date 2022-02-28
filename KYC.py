@@ -1,8 +1,16 @@
+import logging
 from driver import ChromeDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import Const
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+
+from ahk import AHK
+from ahk import ActionChain
+
+logging.basicConfig(level=logging.DEBUG, format="'%(asctime)s - [%(filename)s:%(lineno)d][KYC LOG] %(message)s'") 
 
 # 크롬 브라우저 객체
 driver = ChromeDriver().set_driver()
@@ -18,22 +26,22 @@ def testIdCardMode():
     idKindOp = 2
     
     connect(Const.TEST_SITE_URL)
-    print('=== KYC connect ===')
+    logging.debug('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    print('=== KYC click Id Card Mode ===')
+    logging.debug('=== KYC click Id Card Mode ===')
 
     enterPrivacyInfo(funcOp)
-    print('=== KYC enter Privacy Info ===')
+    logging.debug('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    print('=== KYC select ID Card ===')
+    logging.debug('=== KYC select ID Card ===')
 
     uploadIdImageFile(idKindOp)
-    print('=== KYC upload ID Card Image File ===')
+    logging.debug('=== KYC upload ID Card Image File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    print('=== KYC verify Id Card Info ===')
+    logging.debug('=== KYC verify Id Card Info ===')
     
 """
 운전면허증 검사 자동화 테스트
@@ -46,26 +54,113 @@ def testIdCard_DriversLicenseMode():
     idKindOp = 3
     
     connect(Const.TEST_SITE_URL)
-    print('=== KYC connect ===')
+    logging.debug('=== KYC connect ===')    
 
     clickTestMode(funcOp)
-    print('=== KYC click Drivers License Mode ===')
+    logging.debug('=== KYC click Drivers License Mode ===')
 
     enterPrivacyInfo(funcOp)
-    print('=== KYC enter Privacy Info ===')
+    logging.debug('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    print('=== KYC select Drivers License ===')
+    logging.debug('=== KYC select Drivers License ===')
 
     uploadIdImageFile(idKindOp)
-    print('=== KYC upload Drivers License File ===')
+    logging.debug('=== KYC upload Drivers License File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    print('=== KYC verify Drivers License Info ===')
+    logging.debug('=== KYC verify Drivers License Info ===')
 
-###################################################################################
+"""
+한국 여권 검사 자동화 테스트
+"""
+def testIdCard_PassportMode():
+    
+    # 인증 기능 번호 [2 ~ 8]
+    funcOp = 2
+    # 신분증 종류 번호 [2 ~ 6]
+    idKindOp = 4
+    
+    connect(Const.TEST_SITE_URL)
+    logging.debug('=== KYC connect ===')
+
+    clickTestMode(funcOp)
+    logging.debug('=== KYC click Passport Mode ===')
+
+    enterPrivacyInfo(funcOp)
+    logging.debug('=== KYC enter Privacy Info ===')
+
+    selectTypeOfId(idKindOp)
+    logging.debug('=== KYC select Passport ===')
+
+    uploadIdImageFile(idKindOp)
+    logging.debug('=== KYC upload Passport File ===')
+
+    verifyEnteredIdInfo(idKindOp)
+    logging.debug('=== KYC verify Passport Info ===')
+    
+
+"""
+외국 여권 검사 자동화 테스트
+"""
+def testIdCard_foreignPassportMode():
+    
+    # 인증 기능 번호 [2 ~ 8]
+    funcOp = 2
+    # 신분증 종류 번호 [2 ~ 6]
+    idKindOp = 5
+    
+    connect(Const.TEST_SITE_URL)
+    logging.debug('=== KYC connect ===')
+
+    clickTestMode(funcOp)
+    logging.debug('=== KYC click Foreign Passport Mode ===')
+
+    enterPrivacyInfo(funcOp)
+    logging.debug('=== KYC enter Privacy Info ===')
+
+    selectTypeOfId(idKindOp)
+    logging.debug('=== KYC select Foreign Passport ===')
+
+    uploadIdImageFile(idKindOp)
+    logging.debug('=== KYC upload Foreign Passport File ===')
+
+    verifyEnteredIdInfo(idKindOp)
+    logging.debug('=== KYC verify Foreign Passport Info ===')
+    
+
+"""
+외국인등록증 검사 자동화 테스트
+"""
+def testIdCard_alienRegistrationMode():
+    
+    # 인증 기능 번호 [2 ~ 8]
+    funcOp = 2
+    # 신분증 종류 번호 [2 ~ 6]
+    idKindOp = 6
+    
+    connect(Const.TEST_SITE_URL)
+    logging.debug('=== KYC connect ===')
+
+    clickTestMode(funcOp)
+    logging.debug('=== KYC click Alien Registration Mode ===')
+
+    enterPrivacyInfo(funcOp)
+    logging.debug('=== KYC enter Privacy Info ===')
+
+    selectTypeOfId(idKindOp)
+    logging.debug('=== KYC select Alien Registration ===')
+
+    uploadIdImageFile(idKindOp)
+    logging.debug('=== KYC upload Alien Registration File ===')
+
+    verifyEnteredIdInfo(idKindOp)
+    logging.debug('=== KYC verify Alien Registration Info ===')
+    
+
+"""
 # MAIN 페이지
-###################################################################################
+"""
 def connect(url):
     # 페이지 가져오기 (접속)
     driver.get(url)
@@ -110,7 +205,7 @@ def clickTestMode(funcOp):
         targetBtn.click()
 
     else:
-        print('Please call connect() first.')
+        logging.debug('Please call connect() first.')
 
     func = {
         2: '신분증 인증',
@@ -122,12 +217,11 @@ def clickTestMode(funcOp):
         8: '신분증 인증 | 얼굴확인 | 계좌 인증'
         }.get(funcOp, "없는 메뉴")
     
-    print(f'선택한 메뉴는 {func} 입니다.')
+    logging.debug(f'선택한 메뉴는 {func} 입니다.')
 
-
-###################################################################################
+"""
 # 개인정보 입력 페이지
-###################################################################################
+"""
 def enterPrivacyInfo(funcOp):
     if driver:
         # 개인정보 입력 페이지는 iframe 으로 옮겨서 검사해야 코드로 접근이 가능함
@@ -139,16 +233,16 @@ def enterPrivacyInfo(funcOp):
             if(iframeId == Const.KYC_IFRAME_TEXT):
                 driver.switch_to.frame(kycIframe)
 
-                driver.implicitly_wait(5)  # 묵시적 대기, 활성화를 최대 5초까지 기다린다.
-                # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 최대 5초 기다린다.
+                # driver.implicitly_wait(5)  # 묵시적 대기, 활성화를 주어진 시간만큼까지 기다린다.
+                # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
                 nameTextField = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getNameInputXPath(funcOp))))
-                nameTextField.send_keys(Const.USER_NAME)
-
+                nameTextField.send_keys(getUserName(idKindOp))
+                
                 phoneTextField = driver.find_element(By.XPATH, getPhoneInputXPath(funcOp))
                 phoneTextField.send_keys(Const.USER_PHONE)
 
                 birthTextField = driver.find_element(By.XPATH, getBirthInputXPath(funcOp))
-                birthTextField.send_keys(Const.USER_BIRTH)
+                birthTextField.send_keys(getUserBirth(funcOp))
 
                 emailTextField = driver.find_element(By.XPATH, getEmailInputXPath(funcOp))
                 emailTextField.send_keys(Const.USER_EMAIL)
@@ -158,30 +252,32 @@ def enterPrivacyInfo(funcOp):
                 nextBtn.click()
             
             else:
-                print('The iframe id is incorrect. Expected: "kyc_iframe" Actual: ', iframeId)
+                logging.debug('The iframe id is incorrect. Expected: "kyc_iframe" Actual: ', iframeId)
 
     else:
-        print('Please call connect() first.')
+        logging.debug('Please call connect() first.')
 
 
-###################################################################################
+"""
 # 신분증 메뉴 선택 페이지
-###################################################################################
+"""
 def selectTypeOfId(idKindOp):
     if driver:
-        driversLicenseBtn = driver.find_element(By.XPATH, getSelectTypeOfIdXPath(idKindOp))
-        driversLicenseBtn.click()
+        # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
+        choiceIdBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getSelectTypeOfIdXPath(idKindOp))))
+        # choiceIdBtn = driver.find_element(By.XPATH, getSelectTypeOfIdXPath(idKindOp))
+        choiceIdBtn.click()
         
         nextBtn = driver.find_element(By.XPATH, Const.SELECT_COMPLETE_BUTTON_XPATH)
         nextBtn.click()
 
     else:
-        print('Please call connect() first.')
+        logging.debug('Please call connect() first.')
 
 
-###################################################################################
+"""
 # 신분증 사진 업로드 페이지
-###################################################################################
+"""
 def uploadIdImageFile(idKindOp):
     if driver:
         #UPLOAD_IMAGE_BUTTON_XPATH 는 input type file 로 따로 잡아서 사용
@@ -191,23 +287,23 @@ def uploadIdImageFile(idKindOp):
         submitIdBtn.click()
         
         element = driver.switch_to.active_element
-        # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 최대 5초 기다린다.
+        # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
         submitBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, Const.SUBMIT_BUTTON_XPATH)))
         submitBtn.click()
     else:
-        print('Please call connect() first.')
+        logging.debug('Please call connect() first.')
 
 
-###################################################################################
+"""
 # 개인정보 확인 페이지
-###################################################################################
+"""
 def verifyEnteredIdInfo(idKindOp):
     if driver:
-        # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 최대 5초 기다린다.
+        # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
         nextBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getVerifyIdInfoPageNextBtnXPath(idKindOp))))
         nextBtn.click()
     else:
-        print('Please call connect(getNameInputXPath(funcOpNum)) first.')
+        logging.debug('Please call connect(getNameInputXPath(funcOpNum)) first.')
 
 
 def getNameInputXPath(funcOpNum):
@@ -283,18 +379,18 @@ def getSelectTypeOfIdXPath(idKindOpNum):
         6: '외국인등록증'
         }.get(idKindOpNum, "없는 메뉴")
     
-    print(f'선택한 신분증 종류는 {func} 입니다.')
+    logging.debug(f'선택한 신분증 종류는 {func} 입니다.')
     
     return xPath
 
 
 def getIdImageFilePath(idKindOpNum):
     filePath = {
-        2: 'C:\idCard.jpg',
-        3: 'C:\driversLicense.jpg',
-        4: 'C:\passPort.jpg',
-        5: 'C:\foreignPassPort.jpg',
-        6: 'C:\alienRegistrationCard.jpg'
+        2: 'C:\\idCard.jpg',
+        3: 'C:\\driversLicense.jpg',
+        4: 'C:\\passPort.jpg',
+        5: 'C:\\foreignPassPort.jpg',
+        6: 'C:\\alienRegistrationCard.jpg'
         }.get(idKindOpNum, "없는 메뉴")
     
     return filePath
@@ -314,10 +410,34 @@ def getVerifyIdInfoPageNextBtnXPath(idKindOpNum):
     return xPath
 
 
+def getUserName(funcOpNum):
+    xPath = {
+        2: Const.USER_NAME,
+        3: Const.USER_NAME,
+        4: Const.PASSPORT_USER_NAME,
+        5: Const.FOREIGN_USER_NAME,
+        6: Const.REGISTERED_FOREIGN_USER_NAME
+        }.get(funcOpNum, "없는 메뉴")
+    
+    return xPath
+
+
+def getUserBirth(funcOpNum):
+    xPath = {
+        2: Const.USER_BIRTH,
+        3: Const.USER_BIRTH,
+        4: Const.PASSPORT_USER_BIRTH,
+        5: Const.FOREIGN_USER_BIRTH,
+        6: Const.REGISTERED_FOREIGN_USER_BIRTH
+        }.get(funcOpNum, "없는 메뉴")
+    
+    return xPath
+
+
 
 
 
 # def switch(funcOpNum):
 #     function = {2: "신분증 인증", 3: "신분증 인증 & 얼굴확인",
 #                 4: "신분증 인증 & 얼굴확인(+라이브니스)"}.get(funcOpNum, "없는 메뉴")
-#     print(f'선택한 메뉴는 {function} 입니다.')
+#     logging.debug(f'선택한 메뉴는 {function} 입니다.')
