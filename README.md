@@ -20,3 +20,7 @@ KYC-demo-select-template.py 파일에 테스트하려는 모드를 작성한 뒤
 # Solution
 selenium 관련 lib를 찾지 못할 시
 : Ctrl + Shift + P -> Python: Select Interpreter 메뉴에서 Recommended 버전 확인 및 변경
+
+PC에서 얼굴확인 테스트 중, 얼굴을 인식하지 못할 시
+: 테스트 대상 창(ex. Chrome Browser)의 가로 크기를 줄이면 인식함
+

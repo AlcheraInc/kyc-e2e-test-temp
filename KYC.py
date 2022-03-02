@@ -6,14 +6,10 @@ from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import (TimeoutException, NoSuchElementException)
 from datetime import datetime
-from fileinput import filename
 from driver import ChromeDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
-
 if not os.path.exists('./logs'): os.makedirs('./logs')
 
 logFileName = datetime.now().strftime('%Y_%m_%d_%H_%M.log')
@@ -271,12 +267,15 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     testIdCardMode(3,2)
     
     # 다음 버튼 클릭
-    faceShootBtn = driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/div/div[6]/div[2]')
+    faceShootBtn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, Const.TAKE_SELFIE_XPATH)))
     faceShootBtn.click()
     
     # because chrome_options.add_argument('--use-fake-ui-for-media-stream')
     logger.info('Access Camera Auth Alert Pass.')
     
+    driver.execute_script("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
+    logger.info("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
+
     logging.info('==============================')
     logging.info('=== testFaceIdMode SUCCESS ===')
     logging.info('==============================')
