@@ -12,6 +12,12 @@ class WebDriver(metaclass = ABCMeta):
 class ChromeDriver(WebDriver):
     def set_driver(self):
         chrome_options = webdriver.ChromeOptions()
+        # feeds a test pattern to getUserMedia() instead of live camera input.
+        # chrome_options.add_argument('--use-fake-device-for-media-stream')
+        
+        # avoids the need to grant camera/microphone permissions.
+        chrome_options.add_argument('--use-fake-ui-for-media-stream')
+        
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         return driver
     

@@ -274,15 +274,8 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     faceShootBtn = driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/div/div[6]/div[2]')
     faceShootBtn.click()
     
-    try:
-        WebDriverWait(driver, 3).until(EC.alert_is_present())
-        driver.switch_to.alert
-        logger.info(Alert(driver).text)
-        Alert(driver).accept()
-    except TimeoutException:
-        logger.info('Access Camera Auth Alert Pass.')
-        
-    
+    # because chrome_options.add_argument('--use-fake-ui-for-media-stream')
+    logger.info('Access Camera Auth Alert Pass.')
     
     logging.info('==============================')
     logging.info('=== testFaceIdMode SUCCESS ===')
