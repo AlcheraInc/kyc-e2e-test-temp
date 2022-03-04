@@ -7,6 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import (TimeoutException, NoSuchElementException)
 from datetime import datetime
 from driver import ChromeDriver
+from selenium.common.exceptions import NoAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -241,7 +242,7 @@ def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
     logging.info('================================================')
     logging.info('=== testIdCard_alienRegistrationMode SUCCESS ===')
     logging.info('================================================')
-    
+
 
 def testFaceIdMode(funcOp = 3, idKindOp = 2):
     """
@@ -266,18 +267,48 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     
     testIdCardMode(3,2)
     
-    # 다음 버튼 클릭
-    faceShootBtn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, Const.TAKE_SELFIE_XPATH)))
+    # 얼굴 촬영 버튼 클릭
+    faceShootBtn = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, Const.TAKE_SELFIE_XPATH)
+        )
+    )
     faceShootBtn.click()
     
     # because chrome_options.add_argument('--use-fake-ui-for-media-stream')
     logger.info('Access Camera Auth Alert Pass.')
     
-    driver.execute_script("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
-    logger.info("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
-
+    # Execute JavaScript 예시
+    # driver.execute_script("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
+    # # Alert 확인을 누를 때까지 대기
+    # WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(alert_is_not_present())
+    
+    # '화면 영역 안으로 얼굴을 맞춰주세요.' 얼굴인식 화면이 사라질때까지 기다리는 코드.
+    WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(
+        EC.invisibility_of_element(
+            (By.XPATH, Const.FACE_RECOGNITION_TEXT_XPATH)
+        )
+    )
+    
+    # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
+    # '본인 인증 완료'
+    WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(
+        EC.text_to_be_present_in_element(
+            (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
+            Const.COMPLETED_CERFIFICATION_TEXT
+        )
+    )
+    
+    # 성공 여부 체크
+    result = None
+    successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
+    if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+        result = Const.SUCCESS
+    else:
+        result = Const.FAILED
+    
     logging.info('==============================')
-    logging.info('=== testFaceIdMode SUCCESS ===')
+    logging.info('=== testFaceIdMode ' + result + ' ===')
     logging.info('==============================')
     
 def connect(url):
@@ -288,6 +319,7 @@ def connect(url):
     driver.get(url)
 
     # 화면 크기 지정
+    # Windows Xbox Record로 녹화하려면 창 크기 변경 후, 녹화를 시작해야 한다.
     # driver.set_window_rect(0, 0, 1680, 990)  # 특정 좌표(x,y)와 크기(width,height)로 변경
 
     # Debug Window 설정 여부 버튼
@@ -413,7 +445,7 @@ def uploadIdImageFile(idKindOp):
         submitIdBtn = driver.find_element(By.XPATH, Const.SUBMIT_ID_BUTTON_XPATH)
         submitIdBtn.click()
         
-        element = driver.switch_to.active_element
+        driver.switch_to.active_element
         # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
         submitBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, Const.SUBMIT_BUTTON_XPATH)))
         submitBtn.click()
@@ -589,8 +621,14 @@ def existsElement(by: By, target: string):
     return True
 
 
-
-# def switch(funcOpNum):
-#     function = {2: "신분증 인증", 3: "신분증 인증 & 얼굴확인",
-#                 4: "신분증 인증 & 얼굴확인(+라이브니스)"}.get(funcOpNum, "없는 메뉴")
-#     logging.debug(f'선택한 메뉴는 {function} 입니다.')
+class alert_is_not_present(object):
+    """ 
+    Expect an alert to not to be present.
+    usage: WebDriverWait(driver, 1).until(alert_is_not_present())
+    """
+    def __call__(self, driver):
+        try:
+            alert = driver.switch_to.alert
+            return False
+        except NoAlertPresentException:
+            return True

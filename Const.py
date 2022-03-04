@@ -16,6 +16,16 @@ SELECT_COMPLETE_BUTTON_XPATH = '//*[@id="app"]/div[1]/div/div/div[11]/div[2]'
 SUBMIT_ID_BUTTON_XPATH       = '//*[@id="app"]/div[1]/div/div[1]/div[7]/div[2]'
 SUBMIT_BUTTON_XPATH          = '//*[@id="app"]/div[7]/div/div/div/div[4]/div[2]'
 
+# 얼굴 인증 페이지
+TAKE_SELFIE_XPATH                  = '//*[@id="app"]/div[1]/div/div/div[6]/div[2]'
+FACE_RECOGNITION_TEXT_XPATH        = '//*[@id="app"]/div[1]/div/div[1]/div[2]/div'
+COMPLETED_CERFIFICATION_TEXT_XPATH = '//*[@id="app"]/div[1]/div/div/div[2]'
+COMPLETED_CERFIFICATION_TEXT       = '본인 인증 완료'
+
+TIMEOUT_ONE_MINUTE           = 60000
+SUCCESS                      = 'SUCCESS'
+FAILED                       = 'FAILED'
+
 """
 Input Value
 """
