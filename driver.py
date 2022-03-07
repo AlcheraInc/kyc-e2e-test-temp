@@ -2,6 +2,7 @@ from abc import *
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class WebDriver(metaclass = ABCMeta):
     @abstractmethod
@@ -18,6 +19,14 @@ class ChromeDriver(WebDriver):
         # avoids the need to grant camera/microphone permissions.
         chrome_options.add_argument('--use-fake-ui-for-media-stream')
         
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+        caps = DesiredCapabilities.CHROME
+        caps['goog:loggingPrefs'] = {
+            'driver': 'ALL', 
+                # 'performance': 'ALL', 
+                # 'client': 'ALL', 
+                # 'server': 'ALL', 
+                # 'browser' : 'ALL'
+            }
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options, desired_capabilities=caps)
         return driver
     

@@ -2,7 +2,6 @@ import logging
 import string
 import Const
 import os
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import (TimeoutException, NoSuchElementException)
 from datetime import datetime
@@ -63,6 +62,17 @@ def testIdCardMode(funcOp = 2, idKindOp = 2):
 
     verifyEnteredIdInfo(idKindOp)
     logging.info('=== KYC verify Id Card Info ===')
+     
+    perf = driver.get_log('driver')
+    # perf type is List, p type is Dict
+    for p in perf:
+        if 'review_result' in p['message']:
+            logging.info(
+                p['message']
+                .replace('\\"', '"')
+                .replace(',"', ',\n"')
+            )
+            break
 
     logging.info('==============================')
     logging.info('=== testIdCardMode SUCCESS ===')
@@ -305,6 +315,7 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
         result = Const.SUCCESS
     else:
+        logger.info('unexcepted message: ' + successText.text)
         result = Const.FAILED
     
     logging.info('==============================')
@@ -344,7 +355,7 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
     faceShootBtn.click()
     
     # because chrome_options.add_argument('--use-fake-ui-for-media-stream')
-    logger.info('Access Camera Auth Alert Pass.')
+    logger.info('Camera auth alert passed.')
     
     # Execute JavaScript 예시
     # driver.execute_script("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
@@ -393,7 +404,7 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
             vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH)
             logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
             result = Const.FAILED
-    
+        
     logging.info('==============================')
     logging.info('=== testFaceIdMode ' + result + ' ===')
     logging.info('==============================')
@@ -404,6 +415,7 @@ def connect(url):
     """
     # 페이지 가져오기 (접속)
     driver.get(url)
+    logger.info(url)
 
     # 화면 크기 지정
     # Windows Xbox Record로 녹화하려면 창 크기 변경 후, 녹화를 시작해야 한다.
