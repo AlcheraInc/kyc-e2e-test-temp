@@ -21,8 +21,19 @@ TAKE_SELFIE_XPATH                  = '//*[@id="app"]/div[1]/div/div/div[6]/div[2
 FACE_RECOGNITION_TEXT_XPATH        = '//*[@id="app"]/div[1]/div/div[1]/div[2]/div'
 COMPLETED_CERFIFICATION_TEXT_XPATH = '//*[@id="app"]/div[1]/div/div/div[2]'
 COMPLETED_CERFIFICATION_TEXT       = '본인 인증 완료'
+FAILED_CERFIFICATION_TEXT_XPATH    = '//*[@id="app"]/div[1]/div/div[4]/div[2]/div[1]'
+FAILED_CERFIFICATION_TEXT          = '얼굴 인증 실패'
 
-TIMEOUT_ONE_MINUTE           = 60000
+# 얼굴 인증 실패 에러 코드
+FAILED_CERFIFICATION_ERROR_CODE_XPATH               = '//*[@id="app"]/div[1]/div/div[4]/div[2]/div[3]'
+# 얼굴 감지 실패 에러 Title
+FAILED_CERFIFICATION_VCARD_ERROR_CODE_TITLE_XPATH   = '//*[@id="app"]/div[7]/div/div/div/div[1]/div'
+# 얼굴 감지 실패 에러 코드
+FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH         = '//*[@id="app"]/div[7]/div/div/div/div[3]'
+
+
+
+TIMEOUT_ONE_MINUTE           = 60
 SUCCESS                      = 'SUCCESS'
 FAILED                       = 'FAILED'
 

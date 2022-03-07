@@ -310,6 +310,93 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     logging.info('==============================')
     logging.info('=== testFaceIdMode ' + result + ' ===')
     logging.info('==============================')
+
+
+def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
+    """
+    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    
+    testIdCardMode(4,2)
+    
+    # 얼굴 촬영 버튼 클릭
+    faceShootBtn = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, Const.TAKE_SELFIE_XPATH)
+        )
+    )
+    faceShootBtn.click()
+    
+    # because chrome_options.add_argument('--use-fake-ui-for-media-stream')
+    logger.info('Access Camera Auth Alert Pass.')
+    
+    # Execute JavaScript 예시
+    # driver.execute_script("alert('[KYC Auto Test] 얼굴을 인식해주세요.')")
+    # # Alert 확인을 누를 때까지 대기
+    # WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(alert_is_not_present())
+    
+    # '화면 영역 안으로 얼굴을 맞춰주세요.' 얼굴인식 화면이 사라질때까지 기다리는 코드.
+    WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(
+        EC.invisibility_of_element(
+            (By.XPATH, Const.FACE_RECOGNITION_TEXT_XPATH)
+        )
+    )
+    
+    try:
+        # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
+        # '본인 인증 완료'
+        WebDriverWait(driver, 5).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
+                Const.COMPLETED_CERFIFICATION_TEXT
+            )
+        )
+        
+        # 성공 여부 체크
+        result = None
+        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
+        if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+            result = Const.SUCCESS
+        else:
+            logger.info('unexcepted message: ' + successText.text)
+            result = Const.FAILED
+            
+    except (TimeoutException):
+        # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
+        try:
+            # '얼굴 인증 실패'
+            failText = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_TEXT_XPATH)
+            if failText.text == Const.FAILED_CERFIFICATION_TEXT:
+                errorCode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_ERROR_CODE_XPATH)
+                logger.info(errorCode.text)
+                result = Const.FAILED
+        
+        except (Exception):
+            # '얼굴 감지 실패'
+            vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_ERROR_CODE_VCARD_TITLE_XPATH)
+            vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH)
+            logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
+            result = Const.FAILED
+    
+    logging.info('==============================')
+    logging.info('=== testFaceIdMode ' + result + ' ===')
+    logging.info('==============================')
     
 def connect(url):
     """
@@ -320,7 +407,7 @@ def connect(url):
 
     # 화면 크기 지정
     # Windows Xbox Record로 녹화하려면 창 크기 변경 후, 녹화를 시작해야 한다.
-    # driver.set_window_rect(0, 0, 1680, 990)  # 특정 좌표(x,y)와 크기(width,height)로 변경
+    driver.set_window_rect(0, 0, 1000, 1000)  # 특정 좌표(x,y)와 크기(width,height)로 변경
 
     # Debug Window 설정 여부 버튼
     postMsgToggleBtn = driver.find_element(

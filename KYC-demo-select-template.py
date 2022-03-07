@@ -12,6 +12,11 @@ import KYC
 """
 신분증 인증 | 얼굴확인 테스트
 """
-KYC.testFaceIdMode()
+# KYC.testFaceIdMode()
+
+"""
+신분증 인증 | 얼굴확인(라이브니스) 테스트
+"""
+KYC.testFaceIdLivenessMode()
 
 # time.sleep(100)
