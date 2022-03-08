@@ -21,12 +21,16 @@ class ChromeDriver(WebDriver):
         
         caps = DesiredCapabilities.CHROME
         caps['goog:loggingPrefs'] = {
-            'driver': 'ALL', 
+            # 'driver': 'ALL', 
                 # 'performance': 'ALL', 
                 # 'client': 'ALL', 
                 # 'server': 'ALL', 
-                # 'browser' : 'ALL'
+                'browser' : 'ALL'
             }
+        # chrome_options.add_experimental_option('perfLoggingPrefs', {
+        #     'enableNetwork' : True,
+        #     'enablePage' : False,
+        #     })
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options, desired_capabilities=caps)
         return driver
     

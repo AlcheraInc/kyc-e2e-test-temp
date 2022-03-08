@@ -1,4 +1,5 @@
 import logging
+from operator import contains
 import string
 import Const
 import os
@@ -46,37 +47,64 @@ def testIdCardMode(funcOp = 2, idKindOp = 2):
     """
     
     connect(Const.TEST_SITE_URL)
-    logging.info('=== KYC connect ===')
+    logger.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.info('=== KYC click Id Card Mode ===')
+    logger.info('=== KYC click Id Card Mode ===')
 
     enterPrivacyInfo(idKindOp)
-    logging.info('=== KYC enter Privacy Info ===')
+    logger.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.info('=== KYC select ID Card ===')
+    logger.info('=== KYC select ID Card ===')
 
     uploadIdImageFile(idKindOp)
-    logging.info('=== KYC upload ID Card Image File ===')
+    logger.info('=== KYC upload ID Card Image File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.info('=== KYC verify Id Card Info ===')
-     
-    perf = driver.get_log('driver')
-    # perf type is List, p type is Dict
-    for p in perf:
-        if 'review_result' in p['message']:
-            logging.info(
-                p['message']
-                .replace('\\"', '"')
-                .replace(',"', ',\n"')
-            )
-            break
+    logger.info('=== KYC verify Id Card Info ===')
+    
+    try:
+        prefName = 'browser'
+        logger.info(prefName + ': Start.')
+        perf = driver.get_log(prefName)
+        
+        for p in perf:
+            strLog = p['message'].replace(',"', ',\n"').replace('\\"', '"')
+            
+            if 'review_result' in strLog:
+                # logger.info(strLog)
+                splited = str(strLog).split(",")
+                logger.info(splited)
+                # for x in splited:
+                #     # logger.info(x.split(":"))
+                #     strToDic = dict(y.split(",") for y in x.split(":"))
+                # for k, v in strToDic.items():
+                #     logger.info(k, v)
+                
+                # logger.info(
+                #     strLog
+                #     .replace('\\"', '"')
+                #     .replace(',"', ',\n"')
+                # )
+    except (Exception):
+        logger.info(prefName + ': Empty.')
+        
+    # perf = driver.get_log('driver')
+    # logger.info(len(perf))
+    # # perf type is List, p type is Dict
+    # for p in perf:
+    #     # if 'review_result' in p['message']:
+    #         logger.info(
+    #             p['message']
+    #             .replace('\\"', '"')
+    #             .replace(',"', ',\n"')
+    #         )
+    #         # break
 
-    logging.info('==============================')
-    logging.info('=== testIdCardMode SUCCESS ===')
-    logging.info('==============================')
+    logger.info('==============================')
+    logger.info('=== testIdCardMode SUCCESS ===')
+    logger.info('==============================')
     
     
 def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
@@ -101,26 +129,26 @@ def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
     """
     
     connect(Const.TEST_SITE_URL)
-    logging.info('=== KYC connect ===')    
+    logger.info('=== KYC connect ===')    
 
     clickTestMode(funcOp)
-    logging.info('=== KYC click Drivers License Mode ===')
+    logger.info('=== KYC click Drivers License Mode ===')
 
     enterPrivacyInfo(idKindOp)
-    logging.info('=== KYC enter Privacy Info ===')
+    logger.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.info('=== KYC select Drivers License ===')
+    logger.info('=== KYC select Drivers License ===')
 
     uploadIdImageFile(idKindOp)
-    logging.info('=== KYC upload Drivers License File ===')
+    logger.info('=== KYC upload Drivers License File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.info('=== KYC verify Drivers License Info ===')
+    logger.info('=== KYC verify Drivers License Info ===')
 
-    logging.info('=============================================')
-    logging.info('=== testIdCard_DriversLicenseMode SUCCESS ===')
-    logging.info('=============================================')
+    logger.info('=============================================')
+    logger.info('=== testIdCard_DriversLicenseMode SUCCESS ===')
+    logger.info('=============================================')
 
 def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
     """
@@ -144,26 +172,26 @@ def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
     """
     
     connect(Const.TEST_SITE_URL)
-    logging.info('=== KYC connect ===')
+    logger.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.info('=== KYC click Passport Mode ===')
+    logger.info('=== KYC click Passport Mode ===')
 
     enterPrivacyInfo(idKindOp)
-    logging.info('=== KYC enter Privacy Info ===')
+    logger.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.info('=== KYC select Passport ===')
+    logger.info('=== KYC select Passport ===')
 
     uploadIdImageFile(idKindOp)
-    logging.info('=== KYC upload Passport File ===')
+    logger.info('=== KYC upload Passport File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.info('=== KYC verify Passport Info ===')
+    logger.info('=== KYC verify Passport Info ===')
 
-    logging.info('=======================================')
-    logging.info('=== testIdCard_PassportMode SUCCESS ===')
-    logging.info('=======================================')
+    logger.info('=======================================')
+    logger.info('=== testIdCard_PassportMode SUCCESS ===')
+    logger.info('=======================================')
     
 
 def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
@@ -188,26 +216,26 @@ def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
     """
     
     connect(Const.TEST_SITE_URL)
-    logging.info('=== KYC connect ===')
+    logger.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.info('=== KYC click Foreign Passport Mode ===')
+    logger.info('=== KYC click Foreign Passport Mode ===')
 
     enterPrivacyInfo(idKindOp)
-    logging.info('=== KYC enter Privacy Info ===')
+    logger.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.info('=== KYC select Foreign Passport ===')
+    logger.info('=== KYC select Foreign Passport ===')
 
     uploadIdImageFile(idKindOp)
-    logging.info('=== KYC upload Foreign Passport File ===')
+    logger.info('=== KYC upload Foreign Passport File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.info('=== KYC verify Foreign Passport Info ===')
+    logger.info('=== KYC verify Foreign Passport Info ===')
 
-    logging.info('==============================================')
-    logging.info('=== testIdCard_foreignPassportMode SUCCESS ===')
-    logging.info('==============================================')
+    logger.info('==============================================')
+    logger.info('=== testIdCard_foreignPassportMode SUCCESS ===')
+    logger.info('==============================================')
     
 
 def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
@@ -232,26 +260,26 @@ def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
     """
     
     connect(Const.TEST_SITE_URL)
-    logging.info('=== KYC connect ===')
+    logger.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logging.info('=== KYC click Alien Registration Mode ===')
+    logger.info('=== KYC click Alien Registration Mode ===')
 
     enterPrivacyInfo(idKindOp)
-    logging.info('=== KYC enter Privacy Info ===')
+    logger.info('=== KYC enter Privacy Info ===')
 
     selectTypeOfId(idKindOp)
-    logging.info('=== KYC select Alien Registration ===')
+    logger.info('=== KYC select Alien Registration ===')
 
     uploadIdImageFile(idKindOp)
-    logging.info('=== KYC upload Alien Registration File ===')
+    logger.info('=== KYC upload Alien Registration File ===')
 
     verifyEnteredIdInfo(idKindOp)
-    logging.info('=== KYC verify Alien Registration Info ===')
+    logger.info('=== KYC verify Alien Registration Info ===')
 
-    logging.info('================================================')
-    logging.info('=== testIdCard_alienRegistrationMode SUCCESS ===')
-    logging.info('================================================')
+    logger.info('================================================')
+    logger.info('=== testIdCard_alienRegistrationMode SUCCESS ===')
+    logger.info('================================================')
 
 
 def testFaceIdMode(funcOp = 3, idKindOp = 2):
@@ -318,9 +346,9 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
         logger.info('unexcepted message: ' + successText.text)
         result = Const.FAILED
     
-    logging.info('==============================')
-    logging.info('=== testFaceIdMode ' + result + ' ===')
-    logging.info('==============================')
+    logger.info('==============================')
+    logger.info('=== testFaceIdMode ' + result + ' ===')
+    logger.info('==============================')
 
 
 def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
@@ -405,9 +433,9 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
             logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
             result = Const.FAILED
         
-    logging.info('==============================')
-    logging.info('=== testFaceIdMode ' + result + ' ===')
-    logging.info('==============================')
+    logger.info('==============================')
+    logger.info('=== testFaceIdMode ' + result + ' ===')
+    logger.info('==============================')
     
 def connect(url):
     """
@@ -459,7 +487,7 @@ def clickTestMode(funcOp):
         targetBtn.click()
 
     else:
-        logging.info('Please call connect() first.')
+        logger.info('Please call connect() first.')
 
     func = {
         2: '신분증 인증',
@@ -471,7 +499,7 @@ def clickTestMode(funcOp):
         8: '신분증 인증 | 얼굴확인 | 계좌 인증'
         }.get(funcOp, "없는 메뉴")
     
-    logging.info(f'선택한 메뉴는 {func} 입니다.')
+    logger.info(f'선택한 메뉴는 {func} 입니다.')
 
 
 def enterPrivacyInfo(idKindOp):
@@ -508,10 +536,10 @@ def enterPrivacyInfo(idKindOp):
                 nextBtn.click()
             
             else:
-                logging.info('The iframe id is incorrect. Expected: "kyc_iframe" Actual: ', iframeId)
+                logger.info('The iframe id is incorrect. Expected: "kyc_iframe" Actual: ', iframeId)
 
     else:
-        logging.info('Please call connect() first.')
+        logger.info('Please call connect() first.')
 
 
 def selectTypeOfId(idKindOp):
@@ -529,7 +557,7 @@ def selectTypeOfId(idKindOp):
         nextBtn.click()
 
     else:
-        logging.info('Please call connect() first.')
+        logger.info('Please call connect() first.')
 
 
 def uploadIdImageFile(idKindOp):
@@ -549,7 +577,7 @@ def uploadIdImageFile(idKindOp):
         submitBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, Const.SUBMIT_BUTTON_XPATH)))
         submitBtn.click()
     else:
-        logging.info('Please call connect() first.')
+        logger.info('Please call connect() first.')
 
 
 def verifyEnteredIdInfo(idKindOp):
@@ -655,7 +683,7 @@ def getSelectTypeOfIdXPath(idKindOpNum):
         6: '외국인등록증'
         }.get(idKindOpNum, "없는 메뉴")
     
-    logging.info(f'선택한 신분증 종류는 {func} 입니다.')
+    logger.info(f'선택한 신분증 종류는 {func} 입니다.')
     
     return xPath
 
@@ -712,7 +740,7 @@ def getUserBirth(funcOpNum):
 
 def existsElement(by: By, target: string):
     try:
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((by, target)))
+        WebDriverWait(driver, 30).until(EC.presence_of_element_located((by, target)))
     
     except (TimeoutException, NoSuchElementException) as e:
         return False
