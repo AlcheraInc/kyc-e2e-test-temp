@@ -64,43 +64,7 @@ def testIdCardMode(funcOp = 2, idKindOp = 2):
     verifyEnteredIdInfo(idKindOp)
     logger.info('=== KYC verify Id Card Info ===')
     
-    try:
-        prefName = 'browser'
-        logger.info(prefName + ': Start.')
-        perf = driver.get_log(prefName)
-        
-        for p in perf:
-            strLog = p['message'].replace(',"', ',\n"').replace('\\"', '"')
-            
-            if 'review_result' in strLog:
-                # logger.info(strLog)
-                splited = str(strLog).split(",")
-                logger.info(splited)
-                # for x in splited:
-                #     # logger.info(x.split(":"))
-                #     strToDic = dict(y.split(",") for y in x.split(":"))
-                # for k, v in strToDic.items():
-                #     logger.info(k, v)
-                
-                # logger.info(
-                #     strLog
-                #     .replace('\\"', '"')
-                #     .replace(',"', ',\n"')
-                # )
-    except (Exception):
-        logger.info(prefName + ': Empty.')
-        
-    # perf = driver.get_log('driver')
-    # logger.info(len(perf))
-    # # perf type is List, p type is Dict
-    # for p in perf:
-    #     # if 'review_result' in p['message']:
-    #         logger.info(
-    #             p['message']
-    #             .replace('\\"', '"')
-    #             .replace(',"', ',\n"')
-    #         )
-    #         # break
+    logResultToFile()
 
     logger.info('==============================')
     logger.info('=== testIdCardMode SUCCESS ===')
@@ -738,9 +702,79 @@ def getUserBirth(funcOpNum):
     
     return xPath
 
+def logResultToFile(loggingStartWord = '"review_result"'):
+    """
+    : 한줄로 전체 내용이 넘어오는 review_result 파싱 결과를
+    : 다음과 같이 User Readerable한 형태로 로그파일에 추가
+
+    Args:
+        loggingStartWord (str, optional): 기록을 시작할 위치를 나타내는 문자열.
+        : Defaults to '"review_result"'. ex) 'WORD'
+        : 문자열을 변경할때는 apostrophe 내부에 작성해야 한다.
+    
+    Result:
+        "review_result":{"id":578
+        "request_time":"2022-03-10T04:12:10.699Z"
+        "name":"사용자명"
+        "phone_number":"사용자번호"
+        "birthday":"생년월일"
+        "result_type":1
+        "result_email":1
+        "result_sms":2
+        "module":{"id_card_ocr":true
+        "id_card_verification":true
+        "face_authentication":false
+        "account_verification":false
+        "liveness":false}
+        "id_card":{"modified":false
+        "verified":true
+        "id_card_image":"/9j/4AAQSkZJRgABAQEAYABgAAD//gA+Q1JFQVRPUj...생략
+        "id_crop_image":null
+        "original_ocr_data":"{\"idType\":\"1\"
+        \"userName\":\"사용자명\"
+        \"juminNo1\":\"주민등록번호 앞자리\"
+        \"juminNo2\":\"주민등록번호 뒷자리\"
+        \"_juminNo2\":\"2******\"
+        \"issueDate\":\"발급일자\"
+        \"transaction_id\":\"125978368062297a9ca145e1646885532\"}"
+        "modified_ocr_data":null
+        "is_manual_input":false
+        "is_uploaded":true
+        "id_card_origin":"/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST...생략
+        "face_check":null
+        "account":null}
+        "api_response":{"result_code":"N100"
+        "result_message":"결과 메시지"}
+        "result":"성공 여부"}"
+    """
+    try:
+        # 'goog:loggingPrefs'
+        prefName = 'browser'
+        logger.info(prefName + ': Logging start.')
+        
+        # 너무 빨리 얻어와서 값이 없는 경우 대비하는 코드
+        while True:
+            perf = driver.get_log(prefName)
+            if len(perf) > 2: break
+        
+        for p in perf:
+            # Readerable한 형태로 만들기 위한 replace 순서가 있음
+            strLog = p['message'].replace(',"', ',\n"').replace('\\"', '"').replace('\\\\', '\\')
+            
+            if loggingStartWord in strLog:
+                splited = strLog[
+                    strLog.index(loggingStartWord):
+                                ].split(",")
+                for x in splited:
+                    for y in x.split(","):
+                        logger.info(y)
+                            
+    except (Exception)as e:
+        logger.info(prefName + ': Empty.')
+
 def existsElement(by: By, target: string):
     try:
-        WebDriverWait(driver, 30).until(EC.presence_of_element_located((by, target)))
+        WebDriverWait(driver, 8).until(EC.presence_of_element_located((by, target)))
     
     except (TimeoutException, NoSuchElementException) as e:
         return False
