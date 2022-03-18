@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
 import logging
 from operator import contains
 import string
+from tkinter import HORIZONTAL
+from unicodedata import name
 import Const
 import os
+import sys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import (TimeoutException, NoSuchElementException)
 from datetime import datetime
@@ -47,28 +51,23 @@ def testIdCardMode(funcOp = 2, idKindOp = 2):
     """
     
     connect(Const.TEST_SITE_URL)
-    logger.info('=== KYC connect ===')
-
+    
     clickTestMode(funcOp)
-    logger.info('=== KYC click Id Card Mode ===')
+    visualLog('KYC click Id Card Mode')
 
     enterPrivacyInfo(idKindOp)
-    logger.info('=== KYC enter Privacy Info ===')
+    visualLog('KYC enter Privacy Info')
 
     selectTypeOfId(idKindOp)
-    logger.info('=== KYC select ID Card ===')
+    visualLog('KYC select ID Card')
 
     uploadIdImageFile(idKindOp)
-    logger.info('=== KYC upload ID Card Image File ===')
+    visualLog('KYC upload ID Card Image File')
 
     verifyEnteredIdInfo(idKindOp)
-    logger.info('=== KYC verify Id Card Info ===')
+    visualLog('KYC verify Id Card Info')
     
-    logResultToFile()
-
-    logger.info('==============================')
-    logger.info('=== testIdCardMode SUCCESS ===')
-    logger.info('==============================')
+    logResultToFile(sys._getframe().f_code.co_name)
     
     
 def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
@@ -93,26 +92,23 @@ def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
     """
     
     connect(Const.TEST_SITE_URL)
-    logger.info('=== KYC connect ===')    
 
     clickTestMode(funcOp)
-    logger.info('=== KYC click Drivers License Mode ===')
+    visualLog('KYC click Drivers License Mode')
 
     enterPrivacyInfo(idKindOp)
-    logger.info('=== KYC enter Privacy Info ===')
+    visualLog('KYC enter Privacy Info')
 
     selectTypeOfId(idKindOp)
-    logger.info('=== KYC select Drivers License ===')
+    visualLog('KYC select Drivers License')
 
     uploadIdImageFile(idKindOp)
-    logger.info('=== KYC upload Drivers License File ===')
+    visualLog('KYC upload Drivers License File')
 
     verifyEnteredIdInfo(idKindOp)
-    logger.info('=== KYC verify Drivers License Info ===')
-
-    logger.info('=============================================')
-    logger.info('=== testIdCard_DriversLicenseMode SUCCESS ===')
-    logger.info('=============================================')
+    visualLog('KYC verify Drivers License Info')
+    
+    logResultToFile(sys._getframe().f_code.co_name)
 
 def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
     """
@@ -136,26 +132,23 @@ def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
     """
     
     connect(Const.TEST_SITE_URL)
-    logger.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logger.info('=== KYC click Passport Mode ===')
+    visualLog('KYC click Passport Mode')
 
     enterPrivacyInfo(idKindOp)
-    logger.info('=== KYC enter Privacy Info ===')
+    visualLog('KYC enter Privacy Info')
 
     selectTypeOfId(idKindOp)
-    logger.info('=== KYC select Passport ===')
+    visualLog('KYC select Passport')
 
     uploadIdImageFile(idKindOp)
-    logger.info('=== KYC upload Passport File ===')
+    visualLog('KYC upload Passport File')
 
     verifyEnteredIdInfo(idKindOp)
-    logger.info('=== KYC verify Passport Info ===')
-
-    logger.info('=======================================')
-    logger.info('=== testIdCard_PassportMode SUCCESS ===')
-    logger.info('=======================================')
+    visualLog('KYC verify Passport Info')
+    
+    logResultToFile(sys._getframe().f_code.co_name)
     
 
 def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
@@ -180,26 +173,23 @@ def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
     """
     
     connect(Const.TEST_SITE_URL)
-    logger.info('=== KYC connect ===')
-
+    
     clickTestMode(funcOp)
-    logger.info('=== KYC click Foreign Passport Mode ===')
+    visualLog('KYC click Foreign Passport Mode')
 
     enterPrivacyInfo(idKindOp)
-    logger.info('=== KYC enter Privacy Info ===')
+    visualLog('KYC enter Privacy Info')
 
     selectTypeOfId(idKindOp)
-    logger.info('=== KYC select Foreign Passport ===')
+    visualLog('KYC select Foreign Passport')
 
     uploadIdImageFile(idKindOp)
-    logger.info('=== KYC upload Foreign Passport File ===')
+    visualLog('KYC upload Foreign Passport File')
 
     verifyEnteredIdInfo(idKindOp)
-    logger.info('=== KYC verify Foreign Passport Info ===')
-
-    logger.info('==============================================')
-    logger.info('=== testIdCard_foreignPassportMode SUCCESS ===')
-    logger.info('==============================================')
+    visualLog('KYC verify Foreign Passport Info')
+    
+    logResultToFile(sys._getframe().f_code.co_name)
     
 
 def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
@@ -224,26 +214,23 @@ def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
     """
     
     connect(Const.TEST_SITE_URL)
-    logger.info('=== KYC connect ===')
 
     clickTestMode(funcOp)
-    logger.info('=== KYC click Alien Registration Mode ===')
+    visualLog('KYC click Alien Registration Mode')
 
     enterPrivacyInfo(idKindOp)
-    logger.info('=== KYC enter Privacy Info ===')
+    visualLog('KYC enter Privacy Info')
 
     selectTypeOfId(idKindOp)
-    logger.info('=== KYC select Alien Registration ===')
+    visualLog('KYC select Alien Registration')
 
     uploadIdImageFile(idKindOp)
-    logger.info('=== KYC upload Alien Registration File ===')
+    visualLog('KYC upload Alien Registration File')
 
     verifyEnteredIdInfo(idKindOp)
-    logger.info('=== KYC verify Alien Registration Info ===')
-
-    logger.info('================================================')
-    logger.info('=== testIdCard_alienRegistrationMode SUCCESS ===')
-    logger.info('================================================')
+    visualLog('KYC verify Alien Registration Info')
+    
+    logResultToFile(sys._getframe().f_code.co_name)
 
 
 def testFaceIdMode(funcOp = 3, idKindOp = 2):
@@ -310,9 +297,7 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
         logger.info('unexcepted message: ' + successText.text)
         result = Const.FAILED
     
-    logger.info('==============================')
-    logger.info('=== testFaceIdMode ' + result + ' ===')
-    logger.info('==============================')
+    logResultToFile(sys._getframe().f_code.co_name)
 
 
 def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
@@ -392,19 +377,20 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
         
         except (Exception):
             # '얼굴 감지 실패'
-            vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_ERROR_CODE_VCARD_TITLE_XPATH)
+            vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_TITLE_XPATH)
             vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH)
             logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
             result = Const.FAILED
         
-    logger.info('==============================')
-    logger.info('=== testFaceIdMode ' + result + ' ===')
-    logger.info('==============================')
+    logResultToFile(sys._getframe().f_code.co_name)
     
 def connect(url):
     """
     # MAIN 페이지
     """
+    
+    visualLog(sys._getframe().f_code.co_name)
+    
     # 페이지 가져오기 (접속)
     driver.get(url)
     logger.info(url)
@@ -702,12 +688,35 @@ def getUserBirth(funcOpNum):
     
     return xPath
 
-def logResultToFile(loggingStartWord = '"review_result"'):
+def visualLog(contents):
+    """
+    로그 파일에서 눈에 잘 띄게 contents를 남기는 함수\n
+    ────\n
+    connect\n
+    ────\n
+
+    Args:
+        contents (str): 로그 파일에 작성될 내용
+    """
+    
+    horizontalChr = '─'
+    horizontalStr = ''
+    
+    for i in range(len(contents)):
+        horizontalStr += horizontalChr
+
+    logger.info(horizontalChr + horizontalStr + horizontalChr)
+    logger.info(contents)
+    logger.info(horizontalChr + horizontalStr + horizontalChr)
+
+
+def logResultToFile(funcName, loggingStartWord = '"review_result"'):
     """
     : 한줄로 전체 내용이 넘어오는 review_result 파싱 결과를
     : 다음과 같이 User Readerable한 형태로 로그파일에 추가
 
     Args:
+        funcName (str): 호출하는 함수명을 입력받기 위해 sys._getframe().f_code.co_name 을 입력하여 사용.
         loggingStartWord (str, optional): 기록을 시작할 위치를 나타내는 문자열.
         : Defaults to '"review_result"'. ex) 'WORD'
         : 문자열을 변경할때는 apostrophe 내부에 작성해야 한다.
@@ -750,7 +759,10 @@ def logResultToFile(loggingStartWord = '"review_result"'):
     try:
         # 'goog:loggingPrefs'
         prefName = 'browser'
+        
         logger.info(prefName + ': Logging start.')
+        resultTargetWord = '"result":'
+        result = ''
         
         # 너무 빨리 얻어와서 값이 없는 경우 대비하는 코드
         while True:
@@ -767,7 +779,12 @@ def logResultToFile(loggingStartWord = '"review_result"'):
                                 ].split(",")
                 for x in splited:
                     for y in x.split(","):
+                        if resultTargetWord in y:
+                            # 수행 결과 단어를 필터하기 위한 split 코드
+                            result = y[len(resultTargetWord) + 1:len(y) - 3]
                         logger.info(y)
+                        
+        visualLog(funcName + ' ' + result)
                             
     except (Exception)as e:
         logger.info(prefName + ': Empty.')
