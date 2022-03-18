@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from operator import contains
 import string
-from tkinter import HORIZONTAL
-from unicodedata import name
 import Const
 import os
 import sys
@@ -384,6 +381,71 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
         
     logResultToFile(sys._getframe().f_code.co_name)
     
+def testAccountMode(funcOp = 6, idKindOp = 2):
+    """
+    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    
+    connect(Const.TEST_SITE_URL)
+    
+    clickTestMode(funcOp)
+    visualLog('KYC click Account Mode')
+
+    enterPrivacyInfo(idKindOp)
+    visualLog('KYC enter Privacy Info')
+    
+    # 계좌 입력 버튼 클릭
+    enterAccountBtn = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, Const.ENTER_ACCOUNT_BUTTON_XPATH)
+        )
+    )
+    enterAccountBtn.click()
+
+    # 계좌인증 화면이 뜰때까지 기다리는 코드.
+    WebDriverWait(driver, 5).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, Const.VERIFICATION_ACCOUNT_TEXT_XPATH), 
+                Const.VERIFICATION_ACCOUNT_TEXT
+            )
+        )
+    
+    # 은행/증권사 선택
+    bankNStockSelectBtn = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, Const.SELECT_BANK_N_STOCK_XPATH)
+        )
+    )
+    bankNStockSelectBtn.click()
+    # driver.execute_script("arguments[0].innerHTML = ' KB국민 '", bankNStockSelectBtn)
+    
+    # 계좌번호 입력
+    nameTextField = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, Const.ENTER_ACCOUNT_NUMBER_XPATH)))
+    nameTextField.send_keys(Const.ACCOUNT_NUMBER)
+    
+    
+    oneWonSendBtn = driver.find_element(By.XPATH, Const.SEND_ONE_WON_BUTTON_XPATH)
+    oneWonSendBtn.click()
+    
+    print()
+
+    
 def connect(url):
     """
     # MAIN 페이지
@@ -469,7 +531,7 @@ def enterPrivacyInfo(idKindOp):
 
                 # driver.implicitly_wait(5)  # 묵시적 대기, 활성화를 주어진 시간만큼까지 기다린다.
                 # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
-                nameTextField = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getNameInputXPath(idKindOp))))
+                nameTextField = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(EC.element_to_be_clickable((By.XPATH, getNameInputXPath(idKindOp))))
                 nameTextField.send_keys(getUserName(idKindOp))
                 
                 phoneTextField = driver.find_element(By.XPATH, getPhoneInputXPath(idKindOp))
@@ -499,7 +561,7 @@ def selectTypeOfId(idKindOp):
     
     if driver:
         # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
-        choiceIdBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getSelectTypeOfIdXPath(idKindOp))))
+        choiceIdBtn = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(EC.element_to_be_clickable((By.XPATH, getSelectTypeOfIdXPath(idKindOp))))
         # choiceIdBtn = driver.find_element(By.XPATH, getSelectTypeOfIdXPath(idKindOp))
         choiceIdBtn.click()
         
@@ -524,7 +586,7 @@ def uploadIdImageFile(idKindOp):
         
         driver.switch_to.active_element
         # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
-        submitBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, Const.SUBMIT_BUTTON_XPATH)))
+        submitBtn = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(EC.element_to_be_clickable((By.XPATH, Const.SUBMIT_BUTTON_XPATH)))
         submitBtn.click()
     else:
         logger.info('Please call connect() first.')
@@ -538,7 +600,7 @@ def verifyEnteredIdInfo(idKindOp):
     try:
         if driver:
             # EC.element_to_be_clickable - 해당 Element가 클릭 가능할 때까지 주어진 시간만큼 기다린다.
-            nextBtn = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, getVerifyIdInfoPageNextBtnXPath(idKindOp))))
+            nextBtn = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(EC.element_to_be_clickable((By.XPATH, getVerifyIdInfoPageNextBtnXPath(idKindOp))))
             nextBtn.click()
             
             byTxt = By.CLASS_NAME
