@@ -426,13 +426,38 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
             )
         )
     
-    # 은행/증권사 선택
-    bankNStockSelectBtn = WebDriverWait(driver, 10).until(
+    # 은행/증권사 선택 로직
+    # 은행이 Default 이므로, 입력한 BANK_NAME 을 은행명 목록과 비교하고,
+    # 은행명이 아닌경우 증권사명 목록과 비교하여 정보를 입력하는 로직.
+    bankNStockSelectBtn = WebDriverWait(driver, 5).until(
         EC.element_to_be_clickable(
             (By.XPATH, Const.SELECT_BANK_N_STOCK_XPATH)
         )
     )
     bankNStockSelectBtn.click()
+    banklist = driver.find_elements(By.XPATH, Const.BANK_LIST_ITEM_XPATH)
+    
+    visualLog(f'banklist length is {len(banklist)}')
+    bankItem = isContainText(Const.BANK_NAME, banklist)
+    
+    if bankItem:
+        bankItem.click()
+    else:
+        driver.find_element(By.XPATH, Const.STOCK_TAB_XPATH).click()
+        stocklist = driver.find_elements(By.XPATH, Const.BANK_LIST_ITEM_XPATH)
+        # 은행 목록을 얻은 후, 증권사 탭을 눌러, 증권사 목록을 얻을 때, 
+        # list[은행 목록 수 + 증권사 목록 수] 되어 반환되는 듯한 현상으로 인해 필터링하는 코드.
+        stocklist = [stock for stock in stocklist if stock.text != '']
+        
+        visualLog(f'stocklist length is {len(stocklist)}')
+        stockItem = isContainText(Const.BANK_NAME, stocklist)
+        
+        if stockItem:
+            stockItem.click()
+        else:
+            raise Exception(Const.BANK_NAME + '은 은행명/증권사명 목록에 없습니다. 다시 확인 후 값을 수정하고 시도해주세요.')
+            
+    # 이 방식은 안됨
     # driver.execute_script("arguments[0].innerHTML = ' KB국민 '", bankNStockSelectBtn)
     
     # 계좌번호 입력
@@ -860,6 +885,28 @@ def existsElement(by: By, target: string):
     
     return True
 
+def isContainText(target: string, list):
+    """
+    target 문자열을 포함하는 text attribute를 가지는 항목이 
+    list element 중에 존재하는 지 검사한다.
+
+    Args:
+        target (string): 검사할 문자열
+        list (Any): 'text' attribute를 가지는 element list
+
+    Returns:
+        list에 target 문자열이 포함되어 있는 element, 아닌 경우 False
+    """
+    for item in list:
+        if hasattr(item,'text'):
+            if target in item.text:
+                return item
+        else:
+            logger.error(target + ' : comparison target has no "text" attribute.')
+            break
+    
+    return False
+            
 
 class alert_is_not_present(object):
     """ 

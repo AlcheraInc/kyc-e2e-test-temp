@@ -38,6 +38,8 @@ VERIFICATION_ACCOUNT_TEXT           = '계좌인증'
 SELECT_BANK_N_STOCK_XPATH           = '//*[@id="app"]/div[1]/div/div[3]/button/span'
 ENTER_ACCOUNT_NUMBER_XPATH          = '//*[@id="app"]/div[1]/div/div[3]/div[2]/div/input'
 SEND_ONE_WON_BUTTON_XPATH           = '//*[@id="app"]/div[1]/div/div[3]/div[3]'
+BANK_LIST_ITEM_XPATH                = '//*[@class="bank-list-item"]'
+STOCK_TAB_XPATH                     = '//*[@id="app"]/div[7]/div/div/div[2]/div[1]/div/div[2]/div/div[3]'
 은행목록XPATH = '//*[@id="app"]/div[7]/div/div/div[2]/div[2]/div/div[1]/div/ul'
 증권사목록XPATH = '//*[@id="app"]/div[7]/div/div/div[2]/div[2]/div/div[2]/div/ul'
 
@@ -61,5 +63,28 @@ REGISTERED_FOREIGN_USER_BIRTH = '1993-10-19'
 USER_PHONE                    = '01027018838'
 USER_EMAIL                    = 'bj.kim@alcherainc.com'
 
-BANK_NAME                     = '국민은행'
+# NH 농협
+# 우리
+# 신한
+# KB국민
+# 하나
+# 씨티
+# IBK기업
+# 케이뱅크
+# 카카오뱅크
+# 새마을
+# 부산
+# 경남
+# 광주
+# 전북
+# 신협
+# SC제일
+# KDB산업
+# 대구
+# 제주
+# 우체국
+# 수협
+# 저축
+# 산림
+BANK_NAME                     = '국민'
 ACCOUNT_NUMBER                = '03160204206637'
