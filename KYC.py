@@ -468,6 +468,8 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     oneWonSendBtn = driver.find_element(By.XPATH, Const.SEND_ONE_WON_BUTTON_XPATH)
     oneWonSendBtn.click()
     
+    # 5분 내로 인증 번호 4자리 입력하는 로직 구현.
+    
     print()
 
     
