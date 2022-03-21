@@ -460,6 +460,14 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     # 이 방식은 안됨
     # driver.execute_script("arguments[0].innerHTML = ' KB국민 '", bankNStockSelectBtn)
     
+    banklist = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@class='bank-list-container']")))
+    items = banklist.find_elements_by_tag_name("li")
+    for item in items:
+        text = item.text
+        if Const.BANK_NAME in text:
+            item.click()
+        print(text)
+    
     # 계좌번호 입력
     nameTextField = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, Const.ENTER_ACCOUNT_NUMBER_XPATH)))
     nameTextField.send_keys(Const.ACCOUNT_NUMBER)
