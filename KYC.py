@@ -254,7 +254,7 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     testIdCardMode(3,2)
     
     # 얼굴 촬영 버튼 클릭
-    faceShootBtn = WebDriverWait(driver, 10).until(
+    faceShootBtn = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(
         EC.element_to_be_clickable(
             (By.XPATH, Const.TAKE_SELFIE_XPATH)
         )
@@ -321,7 +321,7 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
     testIdCardMode(4,2)
     
     # 얼굴 촬영 버튼 클릭
-    faceShootBtn = WebDriverWait(driver, 10).until(
+    faceShootBtn = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(
         EC.element_to_be_clickable(
             (By.XPATH, Const.TAKE_SELFIE_XPATH)
         )
@@ -346,7 +346,7 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
     try:
         # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
         # '본인 인증 완료'
-        WebDriverWait(driver, 5).until(
+        WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
                 Const.COMPLETED_CERFIFICATION_TEXT
@@ -411,7 +411,7 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     visualLog('KYC enter Privacy Info')
     
     # 계좌 입력 버튼 클릭
-    enterAccountBtn = WebDriverWait(driver, 10).until(
+    enterAccountBtn = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(
         EC.element_to_be_clickable(
             (By.XPATH, Const.ENTER_ACCOUNT_BUTTON_XPATH)
         )
@@ -419,7 +419,7 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     enterAccountBtn.click()
 
     # 계좌인증 화면이 뜰때까지 기다리는 코드.
-    WebDriverWait(driver, 5).until(
+    WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, Const.VERIFICATION_ACCOUNT_TEXT_XPATH), 
                 Const.VERIFICATION_ACCOUNT_TEXT
@@ -429,7 +429,7 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     # 은행/증권사 선택 로직
     # 은행이 Default 이므로, 입력한 BANK_NAME 을 은행명 목록과 비교하고,
     # 은행명이 아닌경우 증권사명 목록과 비교하여 정보를 입력하는 로직.
-    bankNStockSelectBtn = WebDriverWait(driver, 5).until(
+    bankNStockSelectBtn = WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
         EC.element_to_be_clickable(
             (By.XPATH, Const.SELECT_BANK_N_STOCK_XPATH)
         )
@@ -440,15 +440,23 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     visualLog(f'banklist length is {len(banklist)}')
     bankItem = isContainText(Const.BANK_NAME, banklist)
     
+    # Const.BANK_NAME 으로 은행명 목록에서 클릭 시도
     if bankItem:
         bankItem.click()
     else:
+        # Const.BANK_NAME 이 은행명 목록에 없으면
+        # 증권사 Tab 클릭 후, 증권사 목록이 보일 때까지 대기.
         driver.find_element(By.XPATH, Const.STOCK_TAB_XPATH).click()
+        WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
+            EC.presence_of_element_located(
+                (By.XPATH, Const.BANK_LIST_ITEM_XPATH))
+        )
+        
         stocklist = driver.find_elements(By.XPATH, Const.BANK_LIST_ITEM_XPATH)
         # 은행 목록을 얻은 후, 증권사 탭을 눌러, 증권사 목록을 얻을 때, 
         # list[은행 목록 수 + 증권사 목록 수] 되어 반환되는 듯한 현상으로 인해 필터링하는 코드.
         stocklist = [stock for stock in stocklist if stock.text != '']
-        
+
         visualLog(f'stocklist length is {len(stocklist)}')
         stockItem = isContainText(Const.BANK_NAME, stocklist)
         
@@ -461,16 +469,57 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     # driver.execute_script("arguments[0].innerHTML = ' KB국민 '", bankNStockSelectBtn)
     
     # 계좌번호 입력
-    nameTextField = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, Const.ENTER_ACCOUNT_NUMBER_XPATH)))
+    nameTextField = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(EC.element_to_be_clickable((By.XPATH, Const.ENTER_ACCOUNT_NUMBER_XPATH)))
     nameTextField.send_keys(Const.ACCOUNT_NUMBER)
-    
     
     oneWonSendBtn = driver.find_element(By.XPATH, Const.SEND_ONE_WON_BUTTON_XPATH)
     oneWonSendBtn.click()
     
-    # 5분 내로 인증 번호 4자리 입력하는 로직 구현.
+    # 5분 내로 인증 번호 4자리 입력하는 로직.
+    verifyCodeBtn = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE * Const.TIMEOUT_FIVE_SECOND).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, Const.ENTER_VERIFY_CODE_BUTTON_XPATH)
+            )
+        )
+    verifyCodeBtn.click()
     
-    print()
+    # try:
+    # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
+    # '본인 인증 완료'
+    WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
+        EC.text_to_be_present_in_element(
+            (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
+            Const.COMPLETED_CERFIFICATION_TEXT
+        )
+    )
+    
+    # 성공 여부 체크
+    result = None
+    successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
+    if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+        result = Const.SUCCESS
+    else:
+        logger.info('unexcepted message: ' + successText.text)
+        result = Const.FAILED
+            
+    # except (TimeoutException):
+        # # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
+        # try:
+        #     # '얼굴 인증 실패'
+        #     failText = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_TEXT_XPATH)
+        #     if failText.text == Const.FAILED_CERFIFICATION_TEXT:
+        #         errorCode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_ERROR_CODE_XPATH)
+        #         logger.info(errorCode.text)
+        #         result = Const.FAILED
+        
+        # except (Exception):
+        #     # '얼굴 감지 실패'
+        #     vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_TITLE_XPATH)
+        #     vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH)
+        #     logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
+        #     result = Const.FAILED
+        
+    logResultToFile(sys._getframe().f_code.co_name)
 
     
 def connect(url):
@@ -880,7 +929,7 @@ def logResultToFile(funcName, loggingStartWord = '"review_result"'):
 
 def existsElement(by: By, target: string):
     try:
-        WebDriverWait(driver, 8).until(EC.presence_of_element_located((by, target)))
+        WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(EC.presence_of_element_located((by, target)))
     
     except (TimeoutException, NoSuchElementException) as e:
         return False

@@ -40,10 +40,13 @@ ENTER_ACCOUNT_NUMBER_XPATH          = '//*[@id="app"]/div[1]/div/div[3]/div[2]/d
 SEND_ONE_WON_BUTTON_XPATH           = '//*[@id="app"]/div[1]/div/div[3]/div[3]'
 BANK_LIST_ITEM_XPATH                = '//*[@class="bank-list-item"]'
 STOCK_TAB_XPATH                     = '//*[@id="app"]/div[7]/div/div/div[2]/div[1]/div/div[2]/div/div[3]'
+ENTER_VERIFY_CODE_BUTTON_XPATH      = '//*[@id="app"]/div[1]/div/div[9]/button'
 은행목록XPATH = '//*[@id="app"]/div[7]/div/div/div[2]/div[2]/div/div[1]/div/ul'
 증권사목록XPATH = '//*[@id="app"]/div[7]/div/div/div[2]/div[2]/div/div[2]/div/ul'
 
 TIMEOUT_ONE_MINUTE           = 60
+TIMEOUT_FIVE_SECOND          = 5
+TIMEOUT_TEN_SECOND           = 10
 SUCCESS                      = 'SUCCESS'
 FAILED                       = 'FAILED'
 
@@ -63,28 +66,17 @@ REGISTERED_FOREIGN_USER_BIRTH = '1993-10-19'
 USER_PHONE                    = '01027018838'
 USER_EMAIL                    = 'bj.kim@alcherainc.com'
 
-# NH 농협
-# 우리
-# 신한
-# KB국민
-# 하나
-# 씨티
-# IBK기업
-# 케이뱅크
-# 카카오뱅크
-# 새마을
-# 부산
-# 경남
-# 광주
-# 전북
-# 신협
-# SC제일
-# KDB산업
-# 대구
-# 제주
-# 우체국
-# 수협
-# 저축
-# 산림
+# NH 농협   우리        신한      KB국민	    하나
+# 씨티      IBK기업     케이뱅크  카카오뱅크     새마을
+# 부산      경남        광주      전북        신협
+# SC제일    KDB산업     대구      제주        우체국
+# 수협      저축        산림
+
+# 키움          미래에셋대우     삼성        NH투자     대신
+# 신한금융투자   메리츠증권      유진투자     KB증권     한국투자
+# 교보          하이투자      현대차증권    이베스트     SK
+# 한화투자      DB금융투자
 BANK_NAME                     = '국민'
 ACCOUNT_NUMBER                = '03160204206637'
+# BANK_NAME                     = 'KB증권'
+# ACCOUNT_NUMBER                = '32458580801'
