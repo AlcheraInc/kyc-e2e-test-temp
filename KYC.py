@@ -281,15 +281,15 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     # '본인 인증 완료'
     WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
-            Const.COMPLETED_CERFIFICATION_TEXT
+            (By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH), 
+            Const.COMPLETED_CERTIFICATION_TEXT
         )
     )
     
     # 성공 여부 체크
     result = None
-    successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
-    if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+    successText = driver.find_element(By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH)
+    if successText.text == Const.COMPLETED_CERTIFICATION_TEXT:
         result = Const.SUCCESS
     else:
         logger.info('unexcepted message: ' + successText.text)
@@ -349,15 +349,15 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
         # '본인 인증 완료'
         WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
-                Const.COMPLETED_CERFIFICATION_TEXT
+                (By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH), 
+                Const.COMPLETED_CERTIFICATION_TEXT
             )
         )
         
         # 성공 여부 체크
         result = None
-        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
-        if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH)
+        if successText.text == Const.COMPLETED_CERTIFICATION_TEXT:
             result = Const.SUCCESS
         else:
             logger.info('unexcepted message: ' + successText.text)
@@ -367,16 +367,16 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
         # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
         try:
             # '얼굴 인증 실패'
-            failText = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_TEXT_XPATH)
-            if failText.text == Const.FAILED_CERFIFICATION_TEXT:
-                errorCode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_ERROR_CODE_XPATH)
+            failText = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_TEXT_XPATH)
+            if failText.text == Const.FAILED_CERTIFICATION_TEXT:
+                errorCode = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_ERROR_CODE_XPATH)
                 logger.info(errorCode.text)
                 result = Const.FAILED
         
         except (Exception):
             # '얼굴 감지 실패'
-            vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_TITLE_XPATH)
-            vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH)
+            vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_VCARD_ERROR_CODE_TITLE_XPATH)
+            vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_VCARD_ERROR_CODE_XPATH)
             logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
             result = Const.FAILED
         
@@ -496,15 +496,15 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
         # '본인 인증 완료'
         WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
             EC.text_to_be_present_in_element(
-                (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
-                Const.COMPLETED_CERFIFICATION_TEXT
+                (By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH), 
+                Const.COMPLETED_CERTIFICATION_TEXT
             )
         )
         
         # 성공 여부 체크
         result = None
-        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
-        if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH)
+        if successText.text == Const.COMPLETED_CERTIFICATION_TEXT:
             result = Const.SUCCESS
         else:
             logger.info('unexcepted message: ' + successText.text)
