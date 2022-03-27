@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import string
+import subprocess
 import Const
 import os
 import sys
@@ -15,7 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 if not os.path.exists('./logs'): os.makedirs('./logs')
 
 logFileName = datetime.now().strftime('%Y_%m_%d_%H_%M.log')
-file_handler = logging.FileHandler('./logs/' + logFileName)
+file_handler = logging.FileHandler('./logs/' + logFileName, encoding='utf-8')
 formatter = logging.Formatter('%(asctime)s - [%(filename)s:%(funcName)s:%(lineno)d] %(message)s')
 file_handler.setFormatter(formatter)
 
@@ -468,14 +469,6 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     # 이 방식은 안됨
     # driver.execute_script("arguments[0].innerHTML = ' KB국민 '", bankNStockSelectBtn)
     
-    banklist = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@class='bank-list-container']")))
-    items = banklist.find_elements_by_tag_name("li")
-    for item in items:
-        text = item.text
-        if Const.BANK_NAME in text:
-            item.click()
-        print(text)
-    
     # 계좌번호 입력
     nameTextField = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(EC.element_to_be_clickable((By.XPATH, Const.ENTER_ACCOUNT_NUMBER_XPATH)))
     nameTextField.send_keys(Const.ACCOUNT_NUMBER)
@@ -483,49 +476,49 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     oneWonSendBtn = driver.find_element(By.XPATH, Const.SEND_ONE_WON_BUTTON_XPATH)
     oneWonSendBtn.click()
     
-    # 5분 내로 인증 번호 4자리 입력하는 로직.
-    verifyCodeBtn = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE * Const.TIMEOUT_FIVE_SECOND).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, Const.ENTER_VERIFY_CODE_BUTTON_XPATH)
+    try:
+        # 여기서 은행 점검 시간 시, catch 문으로 이동.
+        WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
+            EC.presence_of_element_located(
+                (By.XPATH, Const.ENTER_VERIFY_CODE_BUTTON_XPATH)
             )
         )
-    verifyCodeBtn.click()
-    
-    # try:
-    # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
-    # '본인 인증 완료'
-    WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
-        EC.text_to_be_present_in_element(
-            (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
-            Const.COMPLETED_CERFIFICATION_TEXT
-        )
-    )
-    
-    # 성공 여부 체크
-    result = None
-    successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
-    if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
-        result = Const.SUCCESS
-    else:
-        logger.info('unexcepted message: ' + successText.text)
-        result = Const.FAILED
-            
-    # except (TimeoutException):
-        # # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
-        # try:
-        #     # '얼굴 인증 실패'
-        #     failText = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_TEXT_XPATH)
-        #     if failText.text == Const.FAILED_CERFIFICATION_TEXT:
-        #         errorCode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_ERROR_CODE_XPATH)
-        #         logger.info(errorCode.text)
-        #         result = Const.FAILED
         
-        # except (Exception):
-        #     # '얼굴 감지 실패'
-        #     vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_TITLE_XPATH)
-        #     vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERFIFICATION_VCARD_ERROR_CODE_XPATH)
-        #     logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
-        #     result = Const.FAILED
+        # 5분 내로 인증 번호 4자리 입력하는 로직.
+        verifyCodeBtn = WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE * Const.TIMEOUT_FIVE_SECOND).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, Const.ENTER_VERIFY_CODE_BUTTON_XPATH)
+            )
+        )
+        verifyCodeBtn.click()
+    
+        # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
+        # '본인 인증 완료'
+        WebDriverWait(driver, Const.TIMEOUT_FIVE_SECOND).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH), 
+                Const.COMPLETED_CERFIFICATION_TEXT
+            )
+        )
+        
+        # 성공 여부 체크
+        result = None
+        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERFIFICATION_TEXT_XPATH)
+        if successText.text == Const.COMPLETED_CERFIFICATION_TEXT:
+            result = Const.SUCCESS
+        else:
+            logger.info('unexcepted message: ' + successText.text)
+            result = Const.FAILED
+            
+    except (TimeoutException) as e:
+        # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
+        # '유효시간 만료로 인해 인증에 실패'
+        failText = driver.find_element(By.XPATH, Const.FAILED_VERIFICATION_TEXT_XPATH)
+        if failText.text == Const.FAILED_VERIFICATION_TEXT:
+            logger.info(failText.text)
+            result = Const.FAILED
+        
+        # 입력한 정보가 본인과 맞지 않다는 오류 처리 필요.
         
     logResultToFile(sys._getframe().f_code.co_name)
 
@@ -932,8 +925,12 @@ def logResultToFile(funcName, loggingStartWord = '"review_result"'):
                         
         visualLog(funcName + ' ' + result)
                             
-    except (Exception)as e:
+    except Exception as e:
         logger.info(prefName + ': Empty.')
+
+def openLogFile():
+    subprocess.run(['explorer', file_handler.baseFilename])
+
 
 def existsElement(by: By, target: string):
     try:

@@ -29,4 +29,4 @@ try :
 except Exception as e:
     logging.error(e) 
 
-print()
+KYC.openLogFile()

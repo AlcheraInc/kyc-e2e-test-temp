@@ -41,8 +41,8 @@ SEND_ONE_WON_BUTTON_XPATH           = '//*[@id="app"]/div[1]/div/div[3]/div[3]'
 BANK_LIST_ITEM_XPATH                = '//*[@class="bank-list-item"]'
 STOCK_TAB_XPATH                     = '//*[@id="app"]/div[7]/div/div/div[2]/div[1]/div/div[2]/div/div[3]'
 ENTER_VERIFY_CODE_BUTTON_XPATH      = '//*[@id="app"]/div[1]/div/div[9]/button'
-은행목록XPATH = '//*[@id="app"]/div[7]/div/div/div[2]/div[2]/div/div[1]/div/ul'
-증권사목록XPATH = '//*[@id="app"]/div[7]/div/div/div[2]/div[2]/div/div[2]/div/ul'
+FAILED_VERIFICATION_TEXT_XPATH      = '//*[@id="app"]/div[1]/div/div[3]/div[2]/label'
+FAILED_VERIFICATION_TEXT            = '유효시간 만료로 인해 인증에 실패하였습니다.'
 
 TIMEOUT_ONE_MINUTE           = 60
 TIMEOUT_FIVE_SECOND          = 5
