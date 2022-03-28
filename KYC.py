@@ -48,13 +48,14 @@ def testIdCardMode(funcOp = 2, idKindOp = 2):
         6: 외국인등록증
     """
     
-    connect(Const.TEST_SITE_URL)
+    if funcOp == 2:
+        connect(Const.TEST_SITE_URL)
     
-    clickTestMode(funcOp)
-    visualLog('KYC click Id Card Mode')
+        clickTestMode(funcOp)
+        visualLog('KYC click Id Card Mode')
 
-    enterPrivacyInfo(idKindOp)
-    visualLog('KYC enter Privacy Info')
+        enterPrivacyInfo(idKindOp)
+        visualLog('KYC enter Privacy Info')
 
     selectTypeOfId(idKindOp)
     visualLog('KYC select ID Card')
@@ -65,7 +66,8 @@ def testIdCardMode(funcOp = 2, idKindOp = 2):
     verifyEnteredIdInfo(idKindOp)
     visualLog('KYC verify Id Card Info')
     
-    logResultToFile(sys._getframe().f_code.co_name)
+    if funcOp == 2:
+        logResultToFile(sys._getframe().f_code.co_name)
     
     
 def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
@@ -89,7 +91,8 @@ def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
         6: 외국인등록증
     """
     
-    connect(Const.TEST_SITE_URL)
+    if funcOp == 2:
+        connect(Const.TEST_SITE_URL)
 
     clickTestMode(funcOp)
     visualLog('KYC click Drivers License Mode')
@@ -106,7 +109,8 @@ def testIdCard_DriversLicenseMode(funcOp = 2, idKindOp = 3):
     verifyEnteredIdInfo(idKindOp)
     visualLog('KYC verify Drivers License Info')
     
-    logResultToFile(sys._getframe().f_code.co_name)
+    if funcOp == 2:
+        logResultToFile(sys._getframe().f_code.co_name)
 
 def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
     """
@@ -129,7 +133,8 @@ def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
         6: 외국인등록증
     """
     
-    connect(Const.TEST_SITE_URL)
+    if funcOp == 2:
+        connect(Const.TEST_SITE_URL)
 
     clickTestMode(funcOp)
     visualLog('KYC click Passport Mode')
@@ -146,7 +151,8 @@ def testIdCard_PassportMode(funcOp = 2, idKindOp = 4):
     verifyEnteredIdInfo(idKindOp)
     visualLog('KYC verify Passport Info')
     
-    logResultToFile(sys._getframe().f_code.co_name)
+    if funcOp == 2:
+        logResultToFile(sys._getframe().f_code.co_name)
     
 
 def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
@@ -170,7 +176,8 @@ def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
         6: 외국인등록증
     """
     
-    connect(Const.TEST_SITE_URL)
+    if funcOp == 2:
+        connect(Const.TEST_SITE_URL)
     
     clickTestMode(funcOp)
     visualLog('KYC click Foreign Passport Mode')
@@ -187,7 +194,8 @@ def testIdCard_foreignPassportMode(funcOp = 2, idKindOp = 5):
     verifyEnteredIdInfo(idKindOp)
     visualLog('KYC verify Foreign Passport Info')
     
-    logResultToFile(sys._getframe().f_code.co_name)
+    if funcOp == 2:
+        logResultToFile(sys._getframe().f_code.co_name)
     
 
 def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
@@ -211,7 +219,8 @@ def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
         6: 외국인등록증
     """
     
-    connect(Const.TEST_SITE_URL)
+    if funcOp == 2:
+        connect(Const.TEST_SITE_URL)
 
     clickTestMode(funcOp)
     visualLog('KYC click Alien Registration Mode')
@@ -228,7 +237,8 @@ def testIdCard_alienRegistrationMode(funcOp = 2, idKindOp = 6):
     verifyEnteredIdInfo(idKindOp)
     visualLog('KYC verify Alien Registration Info')
     
-    logResultToFile(sys._getframe().f_code.co_name)
+    if funcOp == 2:
+        logResultToFile(sys._getframe().f_code.co_name)
 
 
 def testFaceIdMode(funcOp = 3, idKindOp = 2):
@@ -277,31 +287,31 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
         )
     )
     
-    # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
-    # '본인 인증 완료'
-    WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(
-        EC.text_to_be_present_in_element(
-            (By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH), 
-            Const.COMPLETED_CERTIFICATION_TEXT
-        )
-    )
-    
-    # 성공 여부 체크
-    result = None
-    successText = driver.find_element(By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH)
-    if successText.text == Const.COMPLETED_CERTIFICATION_TEXT:
-        result = Const.SUCCESS
-    else:
-        logger.info('unexcepted message: ' + successText.text)
-        result = Const.FAILED
- 
     if funcOp == 3:
+        # 이거는 마지막 성공화면이 뜰때까지 기다리는 코드.
+        # '본인 인증 완료'
+        WebDriverWait(driver, Const.TIMEOUT_ONE_MINUTE).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH), 
+                Const.COMPLETED_CERTIFICATION_TEXT
+            )
+        )
+    
+        # 성공 여부 체크
+        result = None
+        successText = driver.find_element(By.XPATH, Const.COMPLETED_CERTIFICATION_TEXT_XPATH)
+        if successText.text == Const.COMPLETED_CERTIFICATION_TEXT:
+            result = Const.SUCCESS
+        else:
+            logger.info('unexcepted message: ' + successText.text)
+            result = Const.FAILED
+ 
         logResultToFile(sys._getframe().f_code.co_name)
 
 
 def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
     """
-    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    신분증 인증 | 얼굴확인(+라이브니스) 검사 자동화 테스트
     
     인증 기능 funcOp
         2: 신분증 인증
@@ -364,21 +374,28 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
             logger.info('unexcepted message: ' + successText.text)
             result = Const.FAILED
             
-    except (TimeoutException):
+    except (TimeoutException) as e:
         # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
-        try:
-            # '얼굴 인증 실패'
+        # '얼굴 인증 실패'
+        if existsElement(By.XPATH, Const.FAILED_CERTIFICATION_TEXT_XPATH):
             failText = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_TEXT_XPATH)
             if failText.text == Const.FAILED_CERTIFICATION_TEXT:
                 errorCode = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_ERROR_CODE_XPATH)
                 logger.info(errorCode.text)
                 result = Const.FAILED
-        
-        except (Exception):
+            else:
+                logger.error(e.msg)
+                result = Const.FAILED
+    
+        elif existsElement(By.XPATH, Const.FAILED_CERTIFICATION_VCARD_ERROR_CODE_TITLE_XPATH):
             # '얼굴 감지 실패'
             vCardErrorTitle = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_VCARD_ERROR_CODE_TITLE_XPATH)
             vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_VCARD_ERROR_CODE_XPATH)
             logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
+            result = Const.FAILED
+        
+        else:
+            logger.error(e.msg)
             result = Const.FAILED
 
     if funcOp == 4:
@@ -386,7 +403,7 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
 
 def testFaceIdLivenessAccountMode(funcOp = 5, idKindOp = 2):
     """
-    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증 검사 자동화 테스트
     
     인증 기능 funcOp
         2: 신분증 인증
@@ -409,12 +426,13 @@ def testFaceIdLivenessAccountMode(funcOp = 5, idKindOp = 2):
     
     testAccountMode(funcOp, idKindOp)
     
-    print()
+    if funcOp == 5:
+        logResultToFile(sys._getframe().f_code.co_name)
     
     
 def testAccountMode(funcOp = 6, idKindOp = 2):
     """
-    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    계좌 인증 검사 자동화 테스트
     
     인증 기능 funcOp
         2: 신분증 인증
@@ -543,16 +561,94 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
     except (TimeoutException) as e:
         # 성공 메시지를 찾지 못하면 실패로 간주하고 진행
         # '유효시간 만료로 인해 인증에 실패'
-        failText = driver.find_element(By.XPATH, Const.FAILED_VERIFICATION_TEXT_XPATH)
-        if failText.text == Const.FAILED_VERIFICATION_TEXT:
-            logger.info(failText.text)
-            result = Const.FAILED
+        if existsElement(By.XPATH, Const.FAILED_VERIFICATION_TEXT_XPATH):
+            failText = driver.find_element(By.XPATH, Const.FAILED_VERIFICATION_TEXT_XPATH)
+            if failText.text == Const.FAILED_VERIFICATION_TEXT:
+                logger.error(failText.text)
+                result = Const.FAILED
         
         # 입력한 정보가 본인과 맞지 않다는 오류 처리 필요.
+        else:
+            logger.error(e.msg)
+            result = Const.FAILED
     
     if funcOp == 6:
         logResultToFile(sys._getframe().f_code.co_name)
 
+def testIdCardAccountMode(funcOp = 7, idKindOp = 2):
+    """
+    신분증 인증 | 계좌 인증 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    if funcOp == 7:
+        connect(Const.TEST_SITE_URL)
+    
+        clickTestMode(funcOp)
+        visualLog('KYC click Id Card Account Mode')
+
+        enterPrivacyInfo(idKindOp)
+        visualLog('KYC enter Privacy Info')
+        
+    testIdCardMode(funcOp, idKindOp)
+    
+    testAccountMode(funcOp, idKindOp)
+    
+    if funcOp == 7:
+        logResultToFile(sys._getframe().f_code.co_name)
+
+def testFaceIdAccountMode(funcOp = 8, idKindOp = 2):
+    """
+    신분증 인증 | 얼굴확인 | 계좌 인증 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
+        
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    if funcOp == 8:
+        connect(Const.TEST_SITE_URL)
+    
+        clickTestMode(funcOp)
+        visualLog('KYC click Face Id Account Mode')
+
+        enterPrivacyInfo(idKindOp)
+        visualLog('KYC enter Privacy Info')
+    
+    testFaceIdMode(funcOp, idKindOp)
+    
+    testAccountMode(funcOp, idKindOp)
+    
+    if funcOp == 8:
+        logResultToFile(sys._getframe().f_code.co_name)
+    
+    
+    
     
 def connect(url):
     """
