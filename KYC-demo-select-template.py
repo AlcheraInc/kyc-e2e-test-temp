@@ -22,9 +22,14 @@ try :
     # KYC.testFaceIdLivenessMode()
 
     """
-    계좌 인증
+    신분증 인증 | 얼굴확인(라이브니스) 테스트 | 계좌 인증
     """
-    KYC.testAccountMode()
+    KYC.testFaceIdLivenessAccountMode()
+    
+    # """
+    # 계좌 인증
+    # """
+    # KYC.testAccountMode()
 
 except Exception as e:
     logging.error(e) 

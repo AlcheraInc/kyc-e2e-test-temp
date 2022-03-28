@@ -252,7 +252,7 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
         6: 외국인등록증
     """
     
-    testIdCardMode(3,2)
+    testIdCardMode(funcOp, idKindOp)
     
     # 얼굴 촬영 버튼 클릭
     faceShootBtn = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(
@@ -294,8 +294,9 @@ def testFaceIdMode(funcOp = 3, idKindOp = 2):
     else:
         logger.info('unexcepted message: ' + successText.text)
         result = Const.FAILED
-    
-    logResultToFile(sys._getframe().f_code.co_name)
+ 
+    if funcOp == 3:
+        logResultToFile(sys._getframe().f_code.co_name)
 
 
 def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
@@ -319,7 +320,7 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
         6: 외국인등록증
     """
     
-    testIdCardMode(4,2)
+    testIdCardMode(funcOp, idKindOp)
     
     # 얼굴 촬영 버튼 클릭
     faceShootBtn = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(
@@ -379,8 +380,37 @@ def testFaceIdLivenessMode(funcOp = 4, idKindOp = 2):
             vCardErrorcode = driver.find_element(By.XPATH, Const.FAILED_CERTIFICATION_VCARD_ERROR_CODE_XPATH)
             logger.error(vCardErrorTitle.text + ": " + vCardErrorcode.text)
             result = Const.FAILED
+
+    if funcOp == 4:
+        logResultToFile(sys._getframe().f_code.co_name)
+
+def testFaceIdLivenessAccountMode(funcOp = 5, idKindOp = 2):
+    """
+    신분증 인증 | 얼굴확인 검사 자동화 테스트
+    
+    인증 기능 funcOp
+        2: 신분증 인증
+        3: 신분증 인증 | 얼굴확인 
+        4: 신분증 인증 | 얼굴확인(+라이브니스)
+        5: 신분증 인증 | 얼굴확인(+라이브니스) | 계좌 인증
+        6: 계좌 인증
+        7: 신분증 인증 | 계좌 인증
+        8: 신분증 인증 | 얼굴확인 | 계좌 인증
         
-    logResultToFile(sys._getframe().f_code.co_name)
+    신분증 종류 idKindOp
+        2: 주민등록증
+        3: 운전면허증
+        4: 한국 여권
+        5: 외국 여권
+        6: 외국인등록증
+    """
+    
+    testFaceIdLivenessMode(funcOp, idKindOp)
+    
+    testAccountMode(funcOp, idKindOp)
+    
+    print()
+    
     
 def testAccountMode(funcOp = 6, idKindOp = 2):
     """
@@ -402,14 +432,14 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
         5: 외국 여권
         6: 외국인등록증
     """
+    if funcOp == 6:
+        connect(Const.TEST_SITE_URL)
     
-    connect(Const.TEST_SITE_URL)
-    
-    clickTestMode(funcOp)
-    visualLog('KYC click Account Mode')
+        clickTestMode(funcOp)
+        visualLog('KYC click Account Mode')
 
-    enterPrivacyInfo(idKindOp)
-    visualLog('KYC enter Privacy Info')
+        enterPrivacyInfo(idKindOp)
+        visualLog('KYC enter Privacy Info')
     
     # 계좌 입력 버튼 클릭
     enterAccountBtn = WebDriverWait(driver, Const.TIMEOUT_TEN_SECOND).until(
@@ -519,8 +549,9 @@ def testAccountMode(funcOp = 6, idKindOp = 2):
             result = Const.FAILED
         
         # 입력한 정보가 본인과 맞지 않다는 오류 처리 필요.
-        
-    logResultToFile(sys._getframe().f_code.co_name)
+    
+    if funcOp == 6:
+        logResultToFile(sys._getframe().f_code.co_name)
 
     
 def connect(url):

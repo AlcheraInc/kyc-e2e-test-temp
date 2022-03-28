@@ -6,23 +6,23 @@ import KYC
 import Const
 
 KYC.connect(Const.TEST_SITE_URL)
-print('=== KYC connect ===')
+KYC.visualLog('=== KYC connect ===')
 
 KYC.clickIdCardMode()
-print('=== KYC clickIdCardMode ===')
+KYC.visualLog('=== KYC clickIdCardMode ===')
 
 KYC.enterPrivacyInfo()
-print('=== KYC enterPrivacyInfo ===')
+KYC.visualLog('=== KYC enterPrivacyInfo ===')
 
 KYC.selectTypeOfId()
-print('=== KYC selectDriversLicense ===')
+KYC.visualLog('=== KYC selectDriversLicense ===')
 
 KYC.uploadIdImageFile()
-print('=== KYC uploadDriversLicenseFile ===')
+KYC.visualLog('=== KYC uploadDriversLicenseFile ===')
 
 KYC.verifyEnteredIdInfo()
-print('=== KYC verifyIdCardInfo ===')
+KYC.visualLog('=== KYC verifyIdCardInfo ===')
 
-print('=== TEST SUCCESS ===')
+KYC.visualLog('=== TEST SUCCESS ===')
 
 time.sleep(1000)
