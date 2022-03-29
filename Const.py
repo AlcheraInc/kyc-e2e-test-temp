@@ -44,6 +44,9 @@ ENTER_VERIFY_CODE_BUTTON_XPATH      = '//*[@id="app"]/div[1]/div/div[9]/button'
 FAILED_VERIFICATION_TEXT_XPATH      = '//*[@id="app"]/div[1]/div/div[3]/div[2]/label'
 FAILED_VERIFICATION_TEXT            = '유효시간 만료로 인해 인증에 실패하였습니다.'
 
+VERIFICATION_COMPLETE_BUTTON_XPATH  = '//*[@id="app"]/div[1]/div/div/div[5]/div'
+RE_TEST_BUTTON_XPATH                = '//*[@id="customer_end_ui"]/div[3]/button'
+
 TIMEOUT_ONE_MINUTE           = 60
 TIMEOUT_FIVE_SECOND          = 5
 TIMEOUT_TEN_SECOND           = 10

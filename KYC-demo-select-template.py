@@ -6,10 +6,10 @@ try :
     신분증 인증 테스트
     """
     KYC.testIdCardMode()
-    KYC.testIdCard_DriversLicenseMode()
-    KYC.testIdCard_PassportMode()
-    KYC.testIdCard_foreignPassportMode()
-    KYC.testIdCard_alienRegistrationMode()
+    # KYC.testIdCard_DriversLicenseMode()
+    # KYC.testIdCard_PassportMode()
+    # KYC.testIdCard_foreignPassportMode()
+    # KYC.testIdCard_alienRegistrationMode()
 
     """
     신분증 인증 | 얼굴확인 테스트
@@ -42,6 +42,6 @@ try :
     KYC.testFaceIdAccountMode()
 
 except Exception as e:
-    logging.error(e.msg) 
+    logging.error(e.msg)
 
 KYC.openLogFile()
